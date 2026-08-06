@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Fitment Stage</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'fitment-stage',
+  crumbs: [ { label: 'Fitment Stage' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Fitment Stage</h1>
+        <p>Analyze candidate fit, capture evaluations, and approve qualified candidates for the next hiring stage.</p>
+      </div>
+    </div>
+
+    <!-- STEP TABS -->
+    <div class="section-label fade-up">Fitment Stages</div>
+    <div class="step-tiles fade-up d1" id="fsTabs"></div>
+  </div>
+
+  <!-- STAGE PANEL -->
+  <div class="fs-panel-card table-card fade-up d2">
+    <div class="fs-panel-head">
+      <div>
+        <h2 id="fsPanelTitle"></h2>
+        <p id="fsPanelSub"></p>
+      </div>
+      <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="fsSearch" placeholder="Search"></div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="req-table" id="fsTable">
+        <thead id="fsThead"></thead>
+        <tbody id="fsBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b id="fsShowing">1</b> Out of <b>50</b> Items</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- STAGE DEFINITIONS ----------
+const STAGES = [
+  {
+    key:"onboarding",
+    title:"Pre Onboarding Check List",
+    sub:"Initial email trigger before onboarding begins",
+    cols:["S.No","Vertical","Requisition ID","Position","Candidate Name","Mobile Number","Email ID","Experience","Status","Action"],
+    rows:[
+      {vertical:"LIMS", req:"REQ001", position:"Labware LIMS Master Data", name:"Sai Kumar P", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", status:"sent"},
+      {vertical:"LIMS", req:"REQ002", position:"Labware LIMS Master Data", name:"Rahul Mehta", mobile:"9876543210", email:"rahulmehta.p@gmail.com", exp:"3.0 Years", status:"pending"},
+    ],
+    renderRow:(r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${r.vertical}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.position}</td>
+        <td>${r.name}</td>
+        <td>${r.mobile}</td>
+        <td>${r.email}</td>
+        <td>${r.exp}</td>
+        <td>${r.status==="sent" ? '<span class="fs-badge fs-badge-sent">Mail Sent</span>' : '<span class="fs-badge fs-badge-yti">Yet to Initiate</span>'}</td>
+        <td>
+          <div class="fs-action-cell">
+            ${r.status==="sent"
+              ? '<button class="fs-btn-sent" disabled>Send Email</button><button class="fs-icon-refresh" title="Resend"><i class="fa-solid fa-rotate-right"></i></button>'
+              : '<button class="fs-btn-send">Send Email</button>'}
+          </div>
+        </td>
+      </tr>`,
+  },
+  {
+    key:"documents",
+    title:"Documents Upload Stage",
+    sub:"Verify submitted documents before moving to CTC discussion",
+    cols:["S.No","Vertical","Requisition ID","Position","Candidate Name","Mobile Number","Email ID","Experience","Documents Status","Action"],
+    rows:[
+      {vertical:"LIMS", req:"REQ001", position:"Labware LIMS Master Data", name:"Sai Kumar P", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", status:"pending"},
+    ],
+    renderRow:(r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${r.vertical}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.position}</td>
+        <td>${r.name}</td>
+        <td>${r.mobile}</td>
+        <td>${r.email}</td>
+        <td>${r.exp}</td>
+        <td><span class="fs-badge fs-badge-pending">Pending</span></td>
+        <td><a href="fitment-onboarding-form.html" class="fs-edit-btn" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      </tr>`,
+  },
+  {
+    key:"ctc",
+    title:"CTC Discussion",
+    sub:"Compensation negotiation details per candidate",
+    cols:["S.No","Vertical","Requisition ID","Position","Candidate Name","Mobile Number","Email ID","Experience","Current CTC","Total Negotiated CTC","Fixed CTC","Variable CTC","Joining Bonus","Benefits","Status","Action"],
+    rows:[
+      {vertical:"LIMS", req:"REQ001", link:true, position:"Labware LIMS Master Data", name:"Sai Kumar P", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", cur:"₹4,50,000", neg:"NA", fixed:"NA", variable:"NA", bonus:"NA", benefits:"NA", status:"scheduled"},
+      {vertical:"CSV", req:"REQ002", link:true, position:"CSV (Manufacturing)", name:"Vinay Kumar", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", cur:"₹6,80,000", neg:"NA", fixed:"NA", variable:"NA", bonus:"NA", benefits:"NA", status:"tbd"},
+      {vertical:"SAP", req:"REQ003", link:false, position:"SAP PPQM", name:"Sandeep S", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", cur:"₹7,00,000", neg:"₹10,00,000", fixed:"₹8,50,000", variable:"₹1,00,000", bonus:"₹50,000", benefits:"Yes", status:"completed"},
+    ],
+    renderRow:(r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${r.vertical}</td>
+        <td>${r.link ? `<a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a>` : r.req}</td>
+        <td>${r.position}</td>
+        <td>${r.name}</td>
+        <td>${r.mobile}</td>
+        <td>${r.email}</td>
+        <td>${r.exp}</td>
+        <td>${r.cur}</td>
+        <td>${r.neg}</td>
+        <td>${r.fixed}</td>
+        <td>${r.variable}</td>
+        <td>${r.bonus}</td>
+        <td>${r.benefits}</td>
+        <td>${({scheduled:'<span class="fs-badge fs-badge-scheduled">Scheduled</span>', tbd:'<span class="fs-badge fs-badge-tbd">TBD</span>', completed:'<span class="fs-badge fs-badge-completed">Completed</span>'})[r.status]}</td>
+        <td><a href="ctc-discussion.html?req=${encodeURIComponent(r.req)}&name=${encodeURIComponent(r.name)}&position=${encodeURIComponent(r.position)}&curCtc=${encodeURIComponent(r.cur.replace('₹',''))}" class="fs-edit-btn" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      </tr>`,
+  },
+  {
+    key:"preoffer",
+    title:"Pre-Offer Approval Initiation Stage",
+    sub:"Final document check before offer letter release",
+    cols:["S.No","Vertical","Requisition ID","Position","Candidate Name","Mobile Number","Email ID","Experience","Current CTC","Total Offered CTC","Documents","Status"],
+    rows:[
+      {vertical:"LIMS", req:"REQ001", position:"Labware LIMS Master Data", name:"Sai Kumar P", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", cur:"₹5,00,000", offered:"₹8,00,000"},
+      {vertical:"CSV", req:"REQ002", position:"CSV (Manufacturing)", name:"Vinay Kumar", mobile:"9876543210", email:"saikumar.p@gmail.com", exp:"2.8 Years", cur:"₹7,00,000", offered:"₹10,00,000"},
+    ],
+    renderRow:(r,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${r.vertical}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.position}</td>
+        <td>${r.name}</td>
+        <td>${r.mobile}</td>
+        <td>${r.email}</td>
+        <td>${r.exp}</td>
+        <td>${r.cur}</td>
+        <td>${r.offered}</td>
+        <td><span class="fs-badge fs-badge-clear">All Clear</span></td>
+        <td><a href="fitment-execution.html?req=${encodeURIComponent(r.req)}&name=${encodeURIComponent(r.name)}&position=${encodeURIComponent(r.position)}" class="fs-edit-btn" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      </tr>`,
+  },
+];
+
+let activeStage = 0;
+
+function renderTabs(){
+  const wrap = document.getElementById("fsTabs");
+  wrap.innerHTML = STAGES.map((s,i) => `
+    <button type="button" class="step-tile${i===activeStage ? ' active' : ''}" data-idx="${i}">
+      <div class="step-tile-badge">${i+1}</div>
+      <div class="step-tile-body">
+        <div class="step-tile-sub">Stage ${i+1}</div>
+        <div class="step-tile-label">${s.title}</div>
+      </div>
+      <div class="step-tile-count">${s.rows.length}</div>
+    </button>
+  `).join("");
+
+  wrap.querySelectorAll(".step-tile").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeStage = Number(btn.dataset.idx);
+      document.getElementById("fsSearch").value = "";
+      renderTabs();
+      renderPanel();
+    });
+  });
+}
+
+function renderPanel(){
+  const stage = STAGES[activeStage];
+  document.getElementById("fsPanelTitle").textContent = stage.title;
+  document.getElementById("fsPanelSub").textContent = stage.sub;
+  document.getElementById("fsThead").innerHTML = `<tr>${stage.cols.map(c=>`<th>${c}</th>`).join("")}</tr>`;
+  renderRows();
+}
+
+function renderRows(){
+  const stage = STAGES[activeStage];
+  const search = document.getElementById("fsSearch").value.trim().toLowerCase();
+  const rows = stage.rows.filter(r => !search || r.name.toLowerCase().includes(search) || r.req.toLowerCase().includes(search));
+
+  const body = document.getElementById("fsBody");
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="${stage.cols.length}"><div class="ip-empty">No candidates match your search.</div></td></tr>`;
+  }else{
+    body.innerHTML = rows.map((r,i)=>stage.renderRow(r,i)).join("");
+  }
+  document.getElementById("fsShowing").textContent = rows.length;
+}
+
+document.getElementById("fsSearch").addEventListener("input", renderRows);
+
+renderTabs();
+renderPanel();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

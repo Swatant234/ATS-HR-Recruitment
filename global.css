@@ -1,0 +1,342 @@
+/* ==========================================================================
+   PRO-ATS — GLOBAL STYLESHEET
+   Design tokens (CSS variables), base resets, and the small set of truly
+   shared atoms used across the whole app (buttons, fade-in animation,
+   the shared scrollable content region). Load this file first.
+   ========================================================================== */
+
+:root {
+  --primary: #1a5fa8;
+  --accent: #2563eb;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #111827;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --hover: #eff6ff;
+  --gold: #f7bb03;
+
+  --app-font: "Poppins", sans-serif;
+
+  --sidebar-w: 195px;
+  --sidebar-w-collapsed: 72px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --shadow-sm:
+    0 1px 2px rgba(17, 24, 39, 0.04), 0 1px 3px rgba(17, 24, 39, 0.06);
+  --shadow-md:
+    0 4px 10px rgba(17, 24, 39, 0.05), 0 2px 4px rgba(17, 24, 39, 0.04);
+  --shadow-lg:
+    0 12px 28px rgba(17, 24, 39, 0.08), 0 4px 10px rgba(17, 24, 39, 0.05);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  font-family: var(--app-font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+  margin: 0;
+}
+body.dark {
+  --bg: #0b1220;
+  --card: #111a2b;
+  --text: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border: #1f2a3d;
+  --hover: #16233a;
+}
+/* ============ SCROLLBARS (consistent look, light + dark) ============ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.45);
+  border-radius: 20px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.8);
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+a {
+  text-decoration: none;
+}
+
+/* Shared scrollable content region (used by pages that don't need an
+   independently-scrolling table, e.g. dashboard.html, requisition-initiation.html) */
+.page-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 20px 24px 28px;
+}
+
+/* ============ SHARED BUTTONS ============ */
+.btn-primary-grad {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 9px;
+  padding: 6px 11px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.24);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+  cursor: pointer;
+}
+.btn-primary-grad:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.32);
+  color: #fff;
+}
+.btn-outline-soft {
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 9px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  transition: all 0.18s ease;
+  cursor: pointer;
+}
+.btn-outline-soft:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--hover);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fadeUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.d1 {
+  animation-delay: 0.03s;
+}
+.d2 {
+  animation-delay: 0.07s;
+}
+.d3 {
+  animation-delay: 0.11s;
+}
+.d4 {
+  animation-delay: 0.15s;
+}
+
+/* ==========================================================================
+   PAGE LOADER — shown the instant any page starts loading (first child of
+   <body>, styled here in global.css which loads in <head> so it paints
+   before anything else, no flash-of-unstyled-content). Removed by the
+   small inline script at the bottom of <body> once the page is ready.
+   Doubles as the "navigating" screen: since every page is a full reload,
+   clicking any sidebar link naturally lands here again on the next page.
+   ========================================================================== */
+#pageLoader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(55, 60, 68, 0.6);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  transition: opacity .45s ease, visibility .45s ease;
+}
+#pageLoader.pl-hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.pl-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.pl-spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 3px solid rgba(209, 213, 219, 0.18);
+  border-top-color: var(--gold, #F7BB03);
+  border-right-color: var(--gold, #F7BB03);
+  box-shadow: 0 0 14px rgba(247, 187, 3, 0.22);
+  animation: plSpin .85s cubic-bezier(.5, 0, .5, 1) infinite;
+}
+@keyframes plSpin { to { transform: rotate(360deg); } }
+.pl-word {
+  font-family: var(--app-font);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: #D1D5DB;
+}
+.pl-status {
+  font-family: var(--app-font);
+  font-size: 11px;
+  font-weight: 500;
+  color: #D1D5DB;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.pl-status .pl-dots span {
+  animation: plDot 1.3s infinite;
+  opacity: 0;
+}
+.pl-status .pl-dots span:nth-child(1) { animation-delay: 0s; }
+.pl-status .pl-dots span:nth-child(2) { animation-delay: .18s; }
+.pl-status .pl-dots span:nth-child(3) { animation-delay: .36s; }
+@keyframes plDot { 0%,60%,100% { opacity: 0; } 25% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .pl-status .pl-dots span,
+  .pl-spinner {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   SHARED — compact "step tile" row, used by Interview Progress,
+   Fitment Stage, and Offer Approval for their level/stage picker.
+   One consistent, short, responsive component instead of three
+   different bulky ones: badge + label (+ optional eyebrow) + count,
+   all on a single ~52px-tall row. Grid auto-fits the available width
+   so it reflows naturally across desktop / tablet / mobile without
+   needing horizontal scroll.
+   ============================================================ */
+.step-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.step-tile {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 13px;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--app-font);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.step-tile::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background .15s ease;
+}
+.step-tile:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--accent);
+}
+.step-tile-badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex: 0 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hover);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 10.5px;
+}
+.step-tile-body {
+  min-width: 0;
+  flex: 1;
+}
+.step-tile-sub {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+.step-tile-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-height: 1.3;
+}
+.step-tile-count {
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--text);
+  flex: 0 0 auto;
+}
+.step-tile.active {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 8px 18px rgba(0, 30, 94, .25);
+}
+.step-tile.active::before { background: var(--gold); }
+.step-tile.active .step-tile-badge { background: rgba(255, 255, 255, .2); color: #fff; }
+.step-tile.active .step-tile-label,
+.step-tile.active .step-tile-count { color: #fff; }
+.step-tile.active .step-tile-sub { color: rgba(255, 255, 255, .72); }
+
+@media (max-width: 700px) {
+  .step-tiles { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .step-tile { padding: 9px 10px; gap: 8px; }
+  .step-tile-badge { width: 26px; height: 26px; flex-basis: 26px; font-size: 9.5px; border-radius: 8px; }
+  .step-tile-label { font-size: 9.5px; }
+  .step-tile-count { font-size: 12.5px; }
+}
+@media (max-width: 420px) {
+  .step-tiles { grid-template-columns: 1fr 1fr; }
+}

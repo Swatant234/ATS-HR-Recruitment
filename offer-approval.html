@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Offer Approval</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'offer-approval',
+  crumbs: [ { label: 'Offer Approval' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Offer Approval</h1>
+        <p>Generate offer letters, route for approvals, track offer status, and manage counter-offers.</p>
+      </div>
+    </div>
+
+    <!-- LEVEL CARDS -->
+    <div class="section-label fade-up">Approval Levels</div>
+    <div class="step-tiles fade-up d1" id="oaLevelGrid"></div>
+  </div>
+
+  <!-- REVIEW PANEL -->
+  <div class="req-toolbar-card table-card fade-up d2">
+    <div class="oa-status-tabs" id="oaStatusTabs"></div>
+
+    <div class="req-toolbar">
+      <span class="req-toolbar-title" id="oaPanelTitle">L1 Review</span>
+      <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="oaSearch" placeholder="Search"></div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="req-table">
+        <thead id="oaThead"></thead>
+        <tbody id="oaBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b id="oaShowing">1</b> Out of <b>50</b> Items</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- STATUS DEFINITIONS ----------
+const STATUS_META = {
+  approved: { label:'Approved', color:'#22C55E', badgeClass:'oa-badge-approved' },
+  rejected: { label:'Rejected', color:'#EF4444', badgeClass:'oa-badge-rejected' },
+  hold:     { label:'Hold',     color:'#F59E0B', badgeClass:'oa-badge-hold' },
+  pending:  { label:'Pending',  color:'#6366F1', badgeClass:'oa-badge-pending' },
+};
+
+// ---------- LEVEL / DATA DEFINITIONS ----------
+const LEVELS = {
+  l1: {
+    tag:'Level 1', title:'Manager Approval', icon:'fa-solid fa-user-tie',
+    panelTitle:'L1 Review', schema:'metrics', approverLabel:'L1 Approver',
+    statuses:['approved','rejected','hold','pending'],
+    rows:{
+      approved:[
+        {req:'REQ-2026-103', name:'Dasa Mani Deepika', position:'Flutter Developer', customer:'Viatris', reqType:'New Hire', totalExp:2, relExp:2, curCtc:'₹6,00,000', tgtCtc:'₹10,00,000', hike:'+37.93%', curLoc:'Mysore', prefLoc:'Hyderabad', notice:'Immediate', doj:'11-May-26', approver:'Deepak Kachare'},
+      ],
+      rejected:[
+        {req:'REQ-2026-098', name:'Karthik Iyer', position:'SAP ABAP Consultant', customer:'Sandoz', reqType:'New Hire', totalExp:5, relExp:4, curCtc:'₹9,50,000', tgtCtc:'₹13,00,000', hike:'+36.84%', curLoc:'Pune', prefLoc:'Bengaluru', notice:'30 Days', doj:'—', approver:'Deepak Kachare'},
+        {req:'REQ-2026-099', name:'Nisha Rao', position:'Python Backend Developer', customer:'Cipla', reqType:'Replacement', totalExp:3, relExp:3, curCtc:'₹7,20,000', tgtCtc:'₹10,50,000', hike:'+45.83%', curLoc:'Chennai', prefLoc:'Hyderabad', notice:'15 Days', doj:'—', approver:'Deepak Kachare'},
+      ],
+      hold:[
+        {req:'REQ-2026-101', name:'Arvind Menon', position:'LIMS Administrator', customer:'Biocon', reqType:'New Hire', totalExp:4, relExp:3, curCtc:'₹8,10,000', tgtCtc:'₹11,20,000', hike:'+38.27%', curLoc:'Kochi', prefLoc:'Hyderabad', notice:'30 Days', doj:'—', approver:'Deepak Kachare'},
+        {req:'REQ-2026-104', name:'Fathima Sheikh', position:'CSV Validation Engineer', customer:'Viatris', reqType:'New Hire', totalExp:2, relExp:2, curCtc:'₹5,80,000', tgtCtc:'₹8,40,000', hike:'+44.83%', curLoc:'Hyderabad', prefLoc:'Hyderabad', notice:'Immediate', doj:'—', approver:'Deepak Kachare'},
+      ],
+      pending:[
+        {req:'REQ-2026-105', name:'Ritesh Bhatt', position:'.NET Full Stack Developer', customer:'Insud Pharma', reqType:'New Hire', totalExp:3, relExp:3, curCtc:'₹7,00,000', tgtCtc:'₹10,20,000', hike:'+45.71%', curLoc:'Mumbai', prefLoc:'Hyderabad', notice:'30 Days', doj:'—', approver:'Deepak Kachare'},
+        {req:'REQ-2026-106', name:'Ananya Das', position:'SAP FICO Consultant', customer:'Sandoz', reqType:'Replacement', totalExp:6, relExp:5, curCtc:'₹11,00,000', tgtCtc:'₹15,50,000', hike:'+40.91%', curLoc:'Kolkata', prefLoc:'Bengaluru', notice:'60 Days', doj:'—', approver:'Deepak Kachare'},
+      ],
+    },
+  },
+  l2: {
+    tag:'Level 2', title:'Vertical Approval', icon:'fa-solid fa-sitemap',
+    panelTitle:'L2 Review', schema:'metrics', approverLabel:'L1 Approver',
+    statuses:['approved','rejected','hold','pending'],
+    rows:{
+      approved:[
+        {req:'REQ-2026-097', name:'Suresh Pillai', position:'SAP PPQM Consultant', customer:'Viatris', reqType:'New Hire', totalExp:5, relExp:4, curCtc:'₹9,00,000', tgtCtc:'₹12,50,000', hike:'+38.89%', curLoc:'Mysore', prefLoc:'Hyderabad', notice:'30 Days', doj:'05-May-26', approver:'Venkat A'},
+      ],
+      rejected:[
+        {req:'REQ-2026-107', name:'Meera Krishnan', position:'CSV Manufacturing Analyst', customer:'Cipla', reqType:'New Hire', totalExp:3, relExp:2, curCtc:'₹6,50,000', tgtCtc:'₹9,00,000', hike:'+38.46%', curLoc:'Chennai', prefLoc:'Hyderabad', notice:'15 Days', doj:'—', approver:'Venkat A'},
+        {req:'REQ-2026-108', name:'Devika Nair', position:'LIMS QA Engineer', customer:'Biocon', reqType:'Replacement', totalExp:4, relExp:3, curCtc:'₹8,00,000', tgtCtc:'₹11,00,000', hike:'+37.50%', curLoc:'Kochi', prefLoc:'Bengaluru', notice:'30 Days', doj:'—', approver:'Venkat A'},
+      ],
+      hold:[
+        {req:'REQ-2026-109', name:'Anil Bose', position:'Python Data Engineer', customer:'Sandoz', reqType:'New Hire', totalExp:4, relExp:4, curCtc:'₹8,60,000', tgtCtc:'₹12,00,000', hike:'+39.53%', curLoc:'Pune', prefLoc:'Hyderabad', notice:'30 Days', doj:'—', approver:'Venkat A'},
+        {req:'REQ-2026-110', name:'Sneha Kulkarni', position:'.NET Backend Developer', customer:'Insud Pharma', reqType:'New Hire', totalExp:3, relExp:2, curCtc:'₹6,80,000', tgtCtc:'₹9,60,000', hike:'+41.18%', curLoc:'Mumbai', prefLoc:'Hyderabad', notice:'15 Days', doj:'—', approver:'Venkat A'},
+      ],
+      pending:[
+        {req:'REQ-2026-102', name:'Pasunoori Lokeshwar', position:'Senior .Net Developer', customer:'Insud Pharma', reqType:'New Hire', totalExp:2, relExp:2, curCtc:'₹6,00,000', tgtCtc:'₹10,00,000', hike:'+37.93%', curLoc:'Mysore', prefLoc:'Hyderabad', notice:'Immediate', doj:'11-May-26', approver:'Deepak Kachare'},
+        {req:'REQ-2026-111', name:'Farhan Ali', position:'SAP FICO Consultant', customer:'Viatris', reqType:'New Hire', totalExp:5, relExp:5, curCtc:'₹10,50,000', tgtCtc:'₹14,80,000', hike:'+40.95%', curLoc:'Hyderabad', prefLoc:'Hyderabad', notice:'30 Days', doj:'—', approver:'Deepak Kachare'},
+      ],
+    },
+  },
+  doj: {
+    tag:'', title:'Revised DOJ', icon:'fa-regular fa-calendar-check',
+    panelTitle:'Revised DOJ', schema:'doj', approverLabel:'Approver',
+    statuses:['approved','pending','hold'],
+    rows:{
+      approved:[
+        {req:'REQ-2026-097', name:'Suresh Pillai', position:'SAP PPQM Consultant', customer:'Viatris', reqType:'New Hire', notice:'30 Days', doj:'05-May-26', revisedDoj:'05-May-26', approver:'Venkat A'},
+      ],
+      pending:[
+        {req:'REQ-2026-102', name:'Pasunoori Lokeshwar', position:'Senior .Net Developer', customer:'Insud Pharma', reqType:'New Hire', notice:'Immediate', doj:'11-May-26', revisedDoj:'12-June-26', approver:'Deepak Kachare / Venkat A'},
+        {req:'REQ-2026-111', name:'Farhan Ali', position:'SAP FICO Consultant', customer:'Viatris', reqType:'New Hire', notice:'30 Days', doj:'20-May-26', revisedDoj:'18-June-26', approver:'Deepak Kachare / Venkat A'},
+      ],
+      hold:[
+        {req:'REQ-2026-109', name:'Anil Bose', position:'Python Data Engineer', customer:'Sandoz', reqType:'New Hire', notice:'30 Days', doj:'15-May-26', revisedDoj:'—', approver:'Venkat A'},
+        {req:'REQ-2026-110', name:'Sneha Kulkarni', position:'.NET Backend Developer', customer:'Insud Pharma', reqType:'New Hire', notice:'15 Days', doj:'22-May-26', revisedDoj:'—', approver:'Venkat A'},
+      ],
+    },
+  },
+};
+
+const LEVEL_ORDER = ['l1','l2','doj'];
+let activeLevel = 'l1';
+let activeStatus = 'approved';
+
+// ---------- LEVEL CARDS ----------
+function renderLevelCards(){
+  const wrap = document.getElementById('oaLevelGrid');
+  wrap.innerHTML = LEVEL_ORDER.map(key => {
+    const lvl = LEVELS[key];
+    const total = Object.values(lvl.rows).reduce((sum, arr) => sum + arr.length, 0);
+    return `
+      <button type="button" class="step-tile${key===activeLevel ? ' active' : ''}" data-level="${key}">
+        <div class="step-tile-badge"><i class="${lvl.icon}"></i></div>
+        <div class="step-tile-body">
+          ${lvl.tag ? `<div class="step-tile-sub">${lvl.tag}</div>` : ''}
+          <div class="step-tile-label">${lvl.title}</div>
+        </div>
+        <div class="step-tile-count">${total}</div>
+      </button>
+    `;
+  }).join('');
+
+  wrap.querySelectorAll('.step-tile').forEach(card => {
+    card.addEventListener('click', () => {
+      activeLevel = card.dataset.level;
+      activeStatus = LEVELS[activeLevel].statuses[0];
+      document.getElementById('oaSearch').value = '';
+      renderLevelCards();
+      renderStatusTabs();
+      renderPanel();
+    });
+  });
+}
+
+// ---------- STATUS TABS ----------
+function renderStatusTabs(){
+  const lvl = LEVELS[activeLevel];
+  const wrap = document.getElementById('oaStatusTabs');
+  wrap.innerHTML = lvl.statuses.map(s => {
+    const meta = STATUS_META[s];
+    const count = lvl.rows[s].length;
+    const isActive = s === activeStatus;
+    return `
+      <button type="button" class="oa-status-tab${isActive ? ' active' : ''}" data-status="${s}" style="${isActive ? `border-bottom-color:${meta.color};` : ''}">
+        <span class="dot" style="background:${meta.color}"></span>${meta.label}
+        <span class="count" style="${isActive ? `background:${meta.color}` : ''}">${count}</span>
+      </button>
+    `;
+  }).join('');
+
+  wrap.querySelectorAll('.oa-status-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      activeStatus = tab.dataset.status;
+      document.getElementById('oaSearch').value = '';
+      renderStatusTabs();
+      renderPanel();
+    });
+  });
+}
+
+// ---------- TABLE SCHEMAS ----------
+const SCHEMAS = {
+  metrics: {
+    cols:(lvl) => ['S.No','Requisition ID','Candidate Name','Position','Customer','Req. Type','Metrics Exp','CTC Metrics','Hike %','Cur. Loc → Pref. Loc','Notice Period','Date of Joining', lvl.approverLabel,'Status','Actions'],
+    renderRow:(r,i,statusMeta,levelKey) => `
+      <tr>
+        <td>${i+1}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.name}</td>
+        <td>${r.position}</td>
+        <td>${r.customer}</td>
+        <td>${r.reqType}</td>
+        <td class="oa-exp-cell"><div class="t1">Total : ${r.totalExp} Yrs</div><div class="t2">Rel : ${r.relExp} Yrs</div></td>
+        <td class="oa-ctc-cell">${r.curCtc}<i class="fa-solid fa-arrow-right"></i>${r.tgtCtc}</td>
+        <td class="oa-hike-up">${r.hike}</td>
+        <td class="oa-loc-cell">${r.curLoc}<i class="fa-solid fa-arrow-right"></i>${r.prefLoc}</td>
+        <td>${r.notice}</td>
+        <td>${r.doj}</td>
+        <td>${r.approver}</td>
+        <td><span class="oa-badge ${statusMeta.badgeClass}">${statusMeta.label}</span></td>
+        <td><a href="offer-review.html?level=${levelKey}&req=${encodeURIComponent(r.req)}&name=${encodeURIComponent(r.name)}&position=${encodeURIComponent(r.position)}&client=${encodeURIComponent(r.customer)}" class="action-edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      </tr>`,
+  },
+  doj: {
+    cols:() => ['S.No','Requisition ID','Candidate Name','Position','Customer','Req. Type','Notice Period','Date of Joining','Revised DOJ', 'Approver','Status','Actions'],
+    renderRow:(r,i,statusMeta,levelKey) => `
+      <tr>
+        <td>${i+1}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.name}</td>
+        <td>${r.position}</td>
+        <td>${r.customer}</td>
+        <td>${r.reqType}</td>
+        <td>${r.notice}</td>
+        <td>${r.doj}</td>
+        <td>${r.revisedDoj}</td>
+        <td>${r.approver}</td>
+        <td><span class="oa-badge ${statusMeta.badgeClass}">${statusMeta.label}</span></td>
+        <td><a href="offer-review.html?level=${levelKey}&req=${encodeURIComponent(r.req)}&name=${encodeURIComponent(r.name)}&position=${encodeURIComponent(r.position)}&client=${encodeURIComponent(r.customer)}" class="action-edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+      </tr>`,
+  },
+};
+
+// ---------- PANEL / TABLE RENDER ----------
+function renderPanel(){
+  const lvl = LEVELS[activeLevel];
+  const schema = SCHEMAS[lvl.schema];
+  document.getElementById('oaPanelTitle').textContent = lvl.panelTitle;
+  document.getElementById('oaThead').innerHTML = `<tr>${schema.cols(lvl).map(c=>`<th>${c}</th>`).join('')}</tr>`;
+  renderRows();
+}
+
+function renderRows(){
+  const lvl = LEVELS[activeLevel];
+  const schema = SCHEMAS[lvl.schema];
+  const statusMeta = STATUS_META[activeStatus];
+  const search = document.getElementById('oaSearch').value.trim().toLowerCase();
+
+  const rows = lvl.rows[activeStatus].filter(r =>
+    !search || r.name.toLowerCase().includes(search) || r.req.toLowerCase().includes(search) || r.position.toLowerCase().includes(search)
+  );
+
+  const body = document.getElementById('oaBody');
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="${schema.cols(lvl).length}"><div class="oa-empty">No requisitions match this filter.</div></td></tr>`;
+  }else{
+    body.innerHTML = rows.map((r,i) => schema.renderRow(r,i,statusMeta,activeLevel)).join('');
+  }
+  document.getElementById('oaShowing').textContent = rows.length;
+}
+
+document.getElementById('oaSearch').addEventListener('input', renderRows);
+
+renderLevelCards();
+renderStatusTabs();
+renderPanel();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Resource Follow Up</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'resource-followup',
+  crumbs: [ { label: 'Resource Follow Up' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Resource Follow Up</h1>
+        <p>Generate offer letters, route for approvals, track offer status, and manage counter-offers.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESOURCE FOLLOW UP TABLE -->
+  <div class="table-card fade-up d1">
+    <div class="req-toolbar">
+      <span class="req-toolbar-title">Resource Follow up</span>
+      <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="rfSearch" placeholder="Search"></div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="ats-table" style="min-width:1080px;">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Requisition ID</th>
+            <th>Vertical</th>
+            <th>Position</th>
+            <th>Resource</th>
+            <th>Date of Joining</th>
+            <th>Follow Up Status</th>
+            <th>Joining Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rfTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b id="rfShowing">1</b> Out of <b>50</b> Items</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- RESOURCE FOLLOW UP DATA ----------
+// fu: status per follow-up touchpoint — 'ok' (green), 'bad' (red), 'pending' (not yet due)
+const RESOURCES = [
+  {req:'REQ-4668', vertical:'LIMS', position:'Labware LIMS Master Data', resource:'Sai Kumar P', doj:'01-07-2026',
+   fu:['ok','bad','bad','bad'], joining:'High Risk', risk:'badge-risk-high'},
+  {req:'REQ-4669', vertical:'.Net', position:'.Net Lead', resource:'Arjun', doj:'01-07-2026',
+   fu:['ok','ok','bad','bad'], joining:'Need Attention', risk:'badge-risk-attention'},
+  {req:'REQ-4670', vertical:'Python', position:'Python Lead', resource:'Pavan', doj:'01-07-2026',
+   fu:['ok','ok','ok','bad'], joining:'Low Risk', risk:'badge-risk-low'},
+  {req:'REQ-4671', vertical:'SAP', position:'SAP ABAP', resource:'Sai', doj:'01-07-2026',
+   fu:['ok','ok','ok','ok'], joining:'On Track', risk:'badge-risk-ontrack'},
+  {req:'REQ-4672', vertical:'.Net', position:'.Net Developer', resource:'Praveen', doj:'01-07-2026',
+   fu:['pending','pending','pending','pending'], joining:'In-Progress', risk:'badge-risk-progress'},
+];
+
+function dotClass(s){ return s === 'ok' ? 'fu-ok' : (s === 'bad' ? 'fu-bad' : 'fu-pending'); }
+
+function renderRows(){
+  const search = document.getElementById('rfSearch').value.trim().toLowerCase();
+  const rows = RESOURCES.filter(r =>
+    !search || r.resource.toLowerCase().includes(search) || r.req.toLowerCase().includes(search) || r.position.toLowerCase().includes(search)
+  );
+
+  const body = document.getElementById('rfTableBody');
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="9"><div class="oa-empty">No resources match your search.</div></td></tr>`;
+  }else{
+    body.innerHTML = rows.map((r,i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">${r.req}</a></td>
+        <td>${r.vertical}</td>
+        <td>${r.position}</td>
+        <td>${r.resource}</td>
+        <td>${r.doj}</td>
+        <td>
+          <div class="fu-dots">
+            ${r.fu.map((s,idx) => `<span class="fu-dot ${dotClass(s)}">F${idx+1}</span>`).join('')}
+          </div>
+        </td>
+        <td><span class="req-badge ${r.risk}">${r.joining}</span></td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <a href="resource-followup-detail.html?req=${encodeURIComponent(r.req)}&vertical=${encodeURIComponent(r.vertical)}&position=${encodeURIComponent(r.position)}&resource=${encodeURIComponent(r.resource)}&doj=${encodeURIComponent(r.doj)}" class="action-edit" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+  document.getElementById('rfShowing').textContent = rows.length;
+}
+
+document.getElementById('rfSearch').addEventListener('input', renderRows);
+renderRows();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

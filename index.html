@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Sign In</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script>
+// Respect whatever theme the person left the app in (e.g. after logging out
+// from dark mode) — but this is overridden back to light the moment they
+// successfully sign in again, see the loginForm submit handler below.
+if (localStorage.getItem('proats-theme') === 'dark') {
+  document.body.classList.add('dark');
+}
+</script>
+<script src="loader.js"></script>
+<div class="login-shell">
+
+  <!-- ============ LEFT BRAND PANEL (image-card carousel) ============ -->
+  <div class="brand-panel" id="brandPanel">
+    <div class="brand-shape brand-shape-1"></div>
+    <div class="brand-shape brand-shape-2"></div>
+    <div class="brand-shape brand-shape-3"></div>
+
+    <div class="brand-topbar login-anim" style="--d:0s">
+      <div class="brand-top">
+        <div class="mark">PA</div>
+        <div>
+          <div class="name">PRO-<span>ATS</span></div>
+          <div class="sub">Recruitment Platform</div>
+        </div>
+      </div>
+      <a href="#" class="back-pill">Back to website<i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- ROTATING SLIDES -->
+    <div class="brand-slides" id="brandSlides">
+
+      <div class="brand-slide active" data-i="0">
+        <div class="brand-illustration">
+          <svg viewBox="0 0 220 190" fill="none">
+            <circle cx="110" cy="95" r="86" fill="rgba(255,255,255,.06)"/>
+            <path d="M40 44h140l-46 66v40l-48 18v-58L40 44z" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.55)" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="150" cy="52" r="20" fill="var(--gold)"/>
+            <path d="M142 52l5.5 5.5L159 46" stroke="#1746a0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1>Hire faster, with total visibility into every stage.</h1>
+        <p>From requisition to offer, PRO-ATS keeps your recruitment team aligned in one shared workspace.</p>
+      </div>
+
+      <div class="brand-slide" data-i="1">
+        <div class="brand-illustration">
+          <svg viewBox="0 0 220 190" fill="none">
+            <circle cx="110" cy="95" r="86" fill="rgba(255,255,255,.06)"/>
+            <rect x="46" y="42" width="100" height="46" rx="10" fill="rgba(255,255,255,.10)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+            <rect x="60" y="66" width="100" height="46" rx="10" fill="rgba(255,255,255,.16)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+            <rect x="74" y="90" width="100" height="46" rx="10" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.65)" stroke-width="2"/>
+            <circle cx="95" cy="112" r="10" fill="var(--gold)"/>
+            <rect x="112" y="106" width="46" height="5" rx="2.5" fill="rgba(255,255,255,.7)"/>
+            <rect x="112" y="117" width="32" height="5" rx="2.5" fill="rgba(255,255,255,.45)"/>
+          </svg>
+        </div>
+        <h1>Centralized candidate profile database.</h1>
+        <p>Every résumé, note, and history — searchable and organized in a single source of truth.</p>
+      </div>
+
+      <div class="brand-slide" data-i="2">
+        <div class="brand-illustration">
+          <svg viewBox="0 0 220 190" fill="none">
+            <circle cx="110" cy="95" r="86" fill="rgba(255,255,255,.06)"/>
+            <rect x="55" y="40" width="110" height="100" rx="14" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.5)" stroke-width="2.5"/>
+            <rect x="55" y="40" width="110" height="26" rx="14" fill="var(--gold)"/>
+            <rect x="70" y="82" width="18" height="18" rx="4" fill="rgba(255,255,255,.55)"/>
+            <rect x="96" y="82" width="18" height="18" rx="4" fill="rgba(255,255,255,.3)"/>
+            <rect x="122" y="82" width="18" height="18" rx="4" fill="rgba(255,255,255,.3)"/>
+            <rect x="70" y="108" width="18" height="18" rx="4" fill="rgba(255,255,255,.3)"/>
+            <path d="M99 116l6 6 12-13" stroke="#1746a0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,-.5)"/>
+            <rect x="96" y="108" width="18" height="18" rx="4" fill="rgba(34,197,94,.85)"/>
+            <path d="M100 117l4 4 8-9" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1>Interview scheduling &amp; panel feedback, unified.</h1>
+        <p>Coordinate panels, capture structured feedback, and move candidates forward without the email back-and-forth.</p>
+      </div>
+
+      <div class="brand-slide" data-i="3">
+        <div class="brand-illustration">
+          <svg viewBox="0 0 220 190" fill="none">
+            <circle cx="110" cy="95" r="86" fill="rgba(255,255,255,.06)"/>
+            <line x1="50" y1="132" x2="170" y2="132" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+            <rect x="62" y="96" width="20" height="36" rx="4" fill="rgba(255,255,255,.28)"/>
+            <rect x="92" y="72" width="20" height="60" rx="4" fill="var(--gold)"/>
+            <rect x="122" y="54" width="20" height="78" rx="4" fill="rgba(255,255,255,.5)"/>
+            <path d="M60 66l24 14 24-22 24 10" stroke="rgba(255,255,255,.85)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <circle cx="132" cy="68" r="5" fill="#fff"/>
+          </svg>
+        </div>
+        <h1>Live requisition &amp; priority analytics.</h1>
+        <p>See pipeline health, hiring velocity, and open-position risk the moment it changes — no waiting on a report.</p>
+      </div>
+
+    </div>
+
+    <div class="brand-dots" id="brandDots">
+      <button type="button" class="brand-dot active" data-i="0" aria-label="Slide 1"></button>
+      <button type="button" class="brand-dot" data-i="1" aria-label="Slide 2"></button>
+      <button type="button" class="brand-dot" data-i="2" aria-label="Slide 3"></button>
+      <button type="button" class="brand-dot" data-i="3" aria-label="Slide 4"></button>
+    </div>
+  </div>
+
+  <!-- ============ RIGHT FORM PANEL ============ -->
+  <div class="form-panel">
+    <div class="login-card login-anim" style="--d:.12s">
+
+      <div class="login-head">
+        <h2>Welcome back</h2>
+        <p>Sign in to continue to your recruitment dashboard.</p>
+      </div>
+
+      <div class="login-error" id="loginError">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span>Invalid email or password. Please try again.</span>
+      </div>
+
+      <form id="loginForm">
+        <div class="login-field login-anim" style="--d:.2s">
+          <label>Work Email</label>
+          <div class="input-wrap">
+            <i class="fa-regular fa-envelope leading"></i>
+            <input type="email" id="email" placeholder="you@company.com" value="john.admin@pro-ats.com" required>
+          </div>
+        </div>
+
+        <div class="login-field login-anim" style="--d:.27s">
+          <label>Password</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-lock leading"></i>
+            <input type="password" id="password" placeholder="Enter your password" value="••••••••" style="padding-right:38px;" required>
+            <button type="button" class="toggle-visibility" id="togglePwd"><i class="fa-regular fa-eye"></i></button>
+          </div>
+        </div>
+
+        <div class="login-row-between login-anim" style="--d:.34s">
+          <label class="remember-check"><input type="checkbox" checked> Remember me</label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login login-anim" style="--d:.41s" id="loginBtn">
+          <i class="fa-solid fa-right-to-bracket"></i>Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// password visibility toggle
+const pwdInput = document.getElementById("password");
+const togglePwd = document.getElementById("togglePwd");
+let pwdRevealed = false;
+togglePwd.addEventListener("click", ()=>{
+  pwdRevealed = !pwdRevealed;
+  pwdInput.type = pwdRevealed ? "text" : "password";
+  togglePwd.innerHTML = pwdRevealed ? '<i class="fa-regular fa-eye-slash"></i>' : '<i class="fa-regular fa-eye"></i>';
+});
+
+// submit
+const loginForm = document.getElementById("loginForm");
+const loginBtn = document.getElementById("loginBtn");
+const loginError = document.getElementById("loginError");
+
+loginForm.addEventListener("submit", function(e){
+  e.preventDefault();
+  loginError.classList.remove("show");
+  loginBtn.disabled = true;
+  loginBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>Signing in…';
+
+  // simulated auth check — demo credentials always succeed
+  setTimeout(()=>{
+    // Every sign-in starts fresh in light mode — dark mode is something
+    // you opt back into per-session via the topbar toggle, not something
+    // that follows you back in automatically.
+    localStorage.removeItem('proats-theme');
+    window.location.href = "dashboard.html";
+  }, 700);
+});
+
+// ---------- BRAND PANEL SLIDE CAROUSEL ----------
+const slides = Array.from(document.querySelectorAll('.brand-slide'));
+const dots = Array.from(document.querySelectorAll('.brand-dot'));
+const brandPanel = document.getElementById('brandPanel');
+let slideIndex = 0;
+let slideTimer = null;
+
+function goToSlide(i){
+  slideIndex = i;
+  slides.forEach((s, idx) => s.classList.toggle('active', idx === i));
+  dots.forEach((d, idx) => d.classList.toggle('active', idx === i));
+}
+function nextSlide(){ goToSlide((slideIndex + 1) % slides.length); }
+function startAutoplay(){ slideTimer = setInterval(nextSlide, 5000); }
+function stopAutoplay(){ clearInterval(slideTimer); }
+
+dots.forEach(dot => {
+  dot.addEventListener('click', () => {
+    goToSlide(parseInt(dot.dataset.i, 10));
+    stopAutoplay();
+    startAutoplay();
+  });
+});
+brandPanel.addEventListener('mouseenter', stopAutoplay);
+brandPanel.addEventListener('mouseleave', startAutoplay);
+
+startAutoplay();
+</script>
+</body>
+</html>

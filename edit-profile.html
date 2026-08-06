@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Edit Candidate</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'profile-database',
+  crumbs: [
+    { label: 'Profile Database', href: 'pro-ats-profile-database.html' },
+    { label: 'Edit Candidate' }
+  ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <div class="page-header fade-up">
+      <div>
+      <!-- <a href="pro-ats-profile-database.html" class="back-link"><i class="fa-solid fa-arrow-left"></i>Back to Profile Database</a> -->
+        <h1>Rajesh Kumar <span class="cand-chip">#REQ-2026-001</span></h1>
+        <p>Manage candidate profile, interview schedule and offer details from one place.</p>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-bar fade-up">
+      <button class="tab-btn active" data-tab="profile"><i class="fa-solid fa-address-card"></i>Candidate Profile Database</button>
+      <button class="tab-btn" data-tab="interview"><i class="fa-regular fa-calendar-check"></i>Interview Schedule Details</button>
+      <button class="tab-btn" data-tab="offer"><i class="fa-regular fa-file-lines"></i>Offer Status</button>
+      <button class="tab-btn" data-tab="audit"><i class="fa-solid fa-clock-rotate-left"></i>Audit History</button>
+    </div>
+  </div>
+
+  <!-- EDIT CARD -->
+  <div class="edit-card fade-up">
+
+    <!-- ===== TAB 1 : CANDIDATE PROFILE DATABASE ===== -->
+    <div class="tab-pane" data-pane="profile">
+      <div class="tab-scroll">
+        <div class="field-grid">
+          <div class="field">
+            <label>Requisition ID<span class="req">*</span></label>
+            <select required><option>#REQ-2026-001</option><option>#REQ-2026-002</option><option>#REQ-2026-003</option></select>
+          </div>
+          <div class="field"><label>First Name<span class="req">*</span></label><input type="text" value="Rajesh"></div>
+          <div class="field"><label>Middle Name</label><input type="text" placeholder="Middle Name"></div>
+          <div class="field"><label>Last Name (Surname)<span class="req">*</span></label><input type="text" value="Kumar"></div>
+
+          <div class="field"><label>Position<span class="req">*</span></label><input type="text" value="SAP FICO"></div>
+          <div class="field"><label>Email<span class="req">*</span></label><input type="email" value="rajesh.kumar@email.com"></div>
+          <div class="field"><label>Phone Number<span class="req">*</span></label><input type="tel" placeholder="Phone Number"></div>
+          <div class="field"><label>Total Experience (Yrs)<span class="req">*</span></label><input type="number" value="2"></div>
+
+          <div class="field"><label>Relevant Experience (Yrs)<span class="req">*</span></label><input type="number" value="2"></div>
+          <div class="field"><label>Current Organization<span class="req">*</span></label><input type="text" value="Accenture"></div>
+          <div class="field"><label>Current Location<span class="req">*</span></label><input type="text" value="Hyderabad"></div>
+          <div class="field"><label>Current CTC (in Lakhs)<span class="req">*</span></label><input type="text" value="₹6,50,000"></div>
+
+          <div class="field"><label>Expected CTC (in Lakhs)<span class="req">*</span></label><input type="text" value="₹9,00,000"></div>
+          <div class="field"><label>Official Notice Period<span class="req">*</span></label><input type="text" value="30 days"></div>
+          <div class="field"><label>Negotiable Notice Period<span class="req">*</span></label><input type="text" value="15 days"></div>
+          <div class="field"><label>Preferred Location<span class="req">*</span></label><input type="text" placeholder="City / Region"></div>
+
+          <div class="field">
+            <label>Sourcing Channel<span class="req">*</span></label>
+            <select required><option>LinkedIn</option><option>Referral</option><option>Naukri</option><option>Company Website</option></select>
+          </div>
+          <div class="field"><label>Recruiter / Referral Name</label><input type="text" placeholder="Full Name"></div>
+        </div>
+
+        <div class="field" style="margin-bottom:6px;">
+          <label>Remarks</label>
+          <textarea placeholder="Add any additional notes…"></textarea>
+        </div>
+
+        <hr class="section-divider">
+
+        <label class="section-label">Attachment<span class="req">*</span></label>
+        <div class="dropzone" id="dropzone1">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <div class="dz-title">Click to upload or drag and drop</div>
+          <div class="dz-sub">PDF, DOC, DOCX (Max 10MB)</div>
+          <div class="dz-filelist" id="dzFileList1"></div>
+          <input type="file" id="fileInput1" accept=".pdf,.doc,.docx" hidden multiple>
+        </div>
+
+        <hr class="section-divider">
+
+        <div class="field-grid cols-3" style="margin-bottom:0;">
+          <div class="field">
+            <label>Profile Screening Status<span class="req">*</span></label>
+            <select required><option>Shortlisted</option><option>Under Review</option><option>Rejected</option><option>On Hold</option></select>
+          </div>
+          <div class="field">
+            <label>Shortlisted / Rejected By<span class="req">*</span></label>
+            <select required><option>Srinivas Rao (HR Team)</option><option>Anita Verma (HR Team)</option><option>Rahul Sharma (Panel)</option></select>
+          </div>
+          <div class="field">
+            <label>Final Status<span class="req">*</span></label>
+            <select required><option>Yes</option><option>No</option><option>Pending</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-actions">
+        <a href="pro-ats-profile-database.html" class="btn-outline-soft">Cancel</a>
+        <button type="button" class="btn-outline-soft">Save as Draft</button>
+        <button type="button" class="btn-primary-grad" onclick="window.location.href='pro-ats-profile-database.html'"><i class="fa-solid fa-floppy-disk"></i>Update Profile</button>
+      </div>
+    </div>
+
+    <!-- ===== TAB 2 : INTERVIEW SCHEDULE DETAILS ===== -->
+    <div class="tab-pane" data-pane="interview" hidden>
+      <div class="tab-scroll">
+        <div class="interview-layout">
+          <div class="round-levels">
+            <div class="rl-label">Round Levels Status</div>
+            <div id="roundLevels" class="rl-list"></div>
+          </div>
+
+          <div class="interview-form">
+            <div class="iv-form-head">
+              <span class="iv-level-tag" id="ivLevelTag">Level - 1</span>
+              <span class="iv-saved-note" id="ivSavedNote"><i class="fa-solid fa-circle-check"></i> Saved</span>
+            </div>
+            <div class="field-grid cols-2">
+              <div class="field"><label>Candidate Name<span class="req">*</span></label><input type="text" value="Rajesh Kumar"></div>
+              <div class="field"><label>Position<span class="req">*</span></label><input type="text" value="SAP FICO"></div>
+
+              <div class="field"><label>Interview Date<span class="req">*</span></label><input type="text" id="ivDate" placeholder="dd-mm-yyyy"></div>
+              <div class="field"><label>Interview Time</label><input type="text" id="ivTime" placeholder="--:-- --"></div>
+
+              <div class="field">
+                <label>Interview Panel 1 (Required)<span class="req">*</span></label>
+                <select id="ivPanel1" required><option value="">Select Primary Panel Member</option><option>Rahul Sharma</option><option>Anita Verma</option></select>
+              </div>
+              <div class="field">
+                <label>Interview Panel 2 / Team Member (Optional)<span class="req">*</span></label>
+                <select id="ivPanel2"><option value="">None / Optional Peer Member</option><option>Kiran Rao</option><option>Divya Menon</option></select>
+              </div>
+
+              <div class="field">
+                <label>Feedback &amp; Status<span class="req">*</span></label>
+                <select id="ivStatus" required><option>Scheduled</option><option>Completed</option><option>Rescheduled</option><option>No Show</option></select>
+              </div>
+              <div class="field"><label>Meeting Link (Optional)<span class="req">*</span></label><input type="text" id="ivLink" placeholder="https://meet.example.com"></div>
+
+              <div class="field">
+                <label>Mode of Interview<span class="req">*</span></label>
+                <select id="ivMode" required><option>Virtual / Face to Face</option><option>Virtual Only</option><option>In-Person Only</option></select>
+              </div>
+            </div>
+
+            <div class="field" style="margin-bottom:0;">
+              <label>Interview Notes (Optional)</label>
+              <textarea id="ivNotes" placeholder="Any special instructions or notes…"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-actions">
+        <button type="button" class="btn-outline-soft" id="ivCancelBtn"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        <button type="button" class="btn-primary-grad" id="ivScheduleBtn"><i class="fa-regular fa-calendar-check"></i>Schedule Interview</button>
+      </div>
+    </div>
+
+    <!-- ===== TAB 3 : OFFER STATUS ===== -->
+    <div class="tab-pane" data-pane="offer" hidden>
+      <div class="tab-scroll">
+        <label class="section-label">Attachments (Signed Offer Letter)</label>
+        <div class="dropzone" id="dropzone2">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <div class="dz-title">Click to upload or drag and drop</div>
+          <div class="dz-sub">PDF, DOC, DOCX (Max 10MB)</div>
+          <div class="dz-filelist" id="dzFileList2"></div>
+          <input type="file" id="fileInput2" accept=".pdf,.doc,.docx" hidden multiple>
+        </div>
+
+        <div class="table-scroll" style="overflow-x:auto;">
+        <table class="offer-table">
+          <thead>
+            <tr><th>S.No</th><th>File Name</th><th>Uploaded By</th><th>Uploaded Date</th><th>Uploaded Time</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><div class="offer-file"><i class="fa-regular fa-file-pdf"></i>Signed Offer Letter.pdf</div></td>
+              <td class="offer-uploader">By resource /<br>by TA Partner</td>
+              <td>25/06/2026</td>
+              <td>12:02:07 PM</td>
+              <td>
+                <div class="offer-actions">
+                  <button class="icon-btn" title="View"><i class="fa-regular fa-eye"></i></button>
+                  <button class="icon-btn" title="Download"><i class="fa-solid fa-download"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB 4 : AUDIT HISTORY ===== -->
+    <div class="tab-pane" data-pane="audit" hidden>
+      <div class="cj-timeline-scroll">
+        <div class="cj-summary-stats" id="auditSummaryStats" style="border:1px solid var(--border);border-radius:12px;padding:16px 20px;background:var(--bg);margin-bottom:24px;"></div>
+        <div class="cj-timeline" id="auditTimeline"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ---------- TAB SWITCHING ----------
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+    document.querySelectorAll(".tab-pane").forEach(p=>p.hidden = true);
+    btn.classList.add("active");
+    document.querySelector(`.tab-pane[data-pane="${btn.dataset.tab}"]`).hidden = false;
+  });
+});
+// open a specific tab if linked via ?tab=interview
+const params = new URLSearchParams(window.location.search);
+const initialTab = params.get("tab");
+if(initialTab){
+  const btn = document.querySelector(`.tab-btn[data-tab="${initialTab}"]`);
+  if(btn) btn.click();
+}
+
+// ---------- DROPZONES ----------
+function wireDropzone(zoneId, inputId, listId){
+  const zone = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  const list = document.getElementById(listId);
+  zone.addEventListener("click", ()=>input.click());
+  ["dragenter","dragover"].forEach(evt=>zone.addEventListener(evt, e=>{e.preventDefault(); zone.classList.add("dragover");}));
+  ["dragleave","drop"].forEach(evt=>zone.addEventListener(evt, e=>{e.preventDefault(); zone.classList.remove("dragover");}));
+  zone.addEventListener("drop", e=>{ input.files = e.dataTransfer.files; render(); });
+  input.addEventListener("change", render);
+  function render(){
+    list.innerHTML = "";
+    Array.from(input.files).forEach(f=>{
+      const chip = document.createElement("div");
+      chip.className = "dz-file-chip";
+      chip.innerHTML = `<i class="fa-regular fa-file-lines"></i><span>${f.name}</span><i class="fa-solid fa-xmark remove"></i>`;
+      list.appendChild(chip);
+    });
+  }
+}
+wireDropzone("dropzone1","fileInput1","dzFileList1");
+wireDropzone("dropzone2","fileInput2","dzFileList2");
+
+// ---------- INTERVIEW ROUND LEVELS (dynamic) ----------
+const INTERVIEW_LEVELS = {
+  1: { status:'completed', date:'18-06-2026', time:'11:00 AM', panel1:'Rahul Sharma', panel2:'', feedback:'Completed', link:'', mode:'In-Person Only', notes:'Cleared technical round with strong SAP FICO fundamentals.' },
+  2: { status:'scheduled', date:'29-07-2026', time:'03:30 PM', panel1:'Anita Verma', panel2:'Kiran Rao', feedback:'Scheduled', link:'https://meet.example.com/l2-rajesh', mode:'Virtual Only', notes:'' },
+  3: { status:'pending', date:'', time:'', panel1:'', panel2:'', feedback:'Scheduled', link:'', mode:'Virtual / Face to Face', notes:'' },
+  4: { status:'pending', date:'', time:'', panel1:'', panel2:'', feedback:'Scheduled', link:'', mode:'Virtual / Face to Face', notes:'' },
+};
+const STATUS_META = {
+  completed:   { label:'Completed',   badgeClass:'rl-completed',   dotClass:'rl-dot-completed',   icon:'fa-solid fa-circle-check' },
+  scheduled:   { label:'Scheduled',   badgeClass:'rl-scheduled',   dotClass:'rl-dot-scheduled',   icon:'fa-regular fa-calendar-check' },
+  pending:     { label:'Pending',     badgeClass:'rl-pending',     dotClass:'rl-dot-pending',     icon:'fa-regular fa-circle' },
+  rescheduled: { label:'Rescheduled', badgeClass:'rl-rescheduled', dotClass:'rl-dot-rescheduled', icon:'fa-solid fa-rotate' },
+  noshow:      { label:'No Show',     badgeClass:'rl-noshow',      dotClass:'rl-dot-noshow',      icon:'fa-solid fa-triangle-exclamation' },
+};
+const FEEDBACK_TO_STATUS = { 'Scheduled':'scheduled', 'Completed':'completed', 'Rescheduled':'rescheduled', 'No Show':'noshow' };
+
+let activeLevel = 1;
+
+function renderRoundLevels(){
+  const wrap = document.getElementById('roundLevels');
+  wrap.innerHTML = Object.keys(INTERVIEW_LEVELS).map(n => {
+    const lvl = INTERVIEW_LEVELS[n];
+    const meta = STATUS_META[lvl.status];
+    return `
+      <button type="button" class="rl-card${Number(n)===activeLevel ? ' active' : ''}" data-level="${n}">
+        <span class="rl-dot ${meta.dotClass}"><i class="${meta.icon}"></i></span>
+        <span class="rl-body">
+          <span class="rl-name">Level - ${n}</span>
+          <span class="rl-badge ${meta.badgeClass}">${meta.label}</span>
+        </span>
+      </button>`;
+  }).join('');
+  wrap.querySelectorAll('.rl-card').forEach(card => {
+    card.addEventListener('click', () => {
+      activeLevel = Number(card.dataset.level);
+      renderRoundLevels();
+      renderForm();
+    });
+  });
+}
+
+function renderForm(){
+  const lvl = INTERVIEW_LEVELS[activeLevel];
+  document.getElementById('ivLevelTag').textContent = `Level - ${activeLevel}`;
+  document.getElementById('ivDate').value = lvl.date;
+  document.getElementById('ivTime').value = lvl.time;
+  document.getElementById('ivPanel1').value = lvl.panel1;
+  document.getElementById('ivPanel2').value = lvl.panel2;
+  document.getElementById('ivStatus').value = lvl.feedback;
+  document.getElementById('ivLink').value = lvl.link;
+  document.getElementById('ivMode').value = lvl.mode;
+  document.getElementById('ivNotes').value = lvl.notes;
+  document.getElementById('ivSavedNote').classList.remove('show');
+
+  document.getElementById('ivScheduleBtn').innerHTML = lvl.status === 'pending'
+    ? '<i class="fa-regular fa-calendar-check"></i>Schedule Interview'
+    : '<i class="fa-solid fa-floppy-disk"></i>Update Interview';
+}
+
+document.getElementById('ivScheduleBtn').addEventListener('click', () => {
+  const lvl = INTERVIEW_LEVELS[activeLevel];
+  lvl.date = document.getElementById('ivDate').value;
+  lvl.time = document.getElementById('ivTime').value;
+  lvl.panel1 = document.getElementById('ivPanel1').value;
+  lvl.panel2 = document.getElementById('ivPanel2').value;
+  lvl.feedback = document.getElementById('ivStatus').value;
+  lvl.link = document.getElementById('ivLink').value;
+  lvl.mode = document.getElementById('ivMode').value;
+  lvl.notes = document.getElementById('ivNotes').value;
+  lvl.status = FEEDBACK_TO_STATUS[lvl.feedback] || 'scheduled';
+
+  renderRoundLevels();
+  renderForm();
+
+  const note = document.getElementById('ivSavedNote');
+  note.classList.add('show');
+  setTimeout(() => note.classList.remove('show'), 2200);
+});
+
+document.getElementById('ivCancelBtn').addEventListener('click', renderForm);
+
+renderRoundLevels();
+renderForm();
+
+// ---------- AUDIT HISTORY ----------
+// Full lifecycle trail for this candidate — every stage of the pipeline
+// from profile creation through onboarding handoff, each with the date it
+// happened, who owns it, and the turnaround time (TAT, in days) it took
+// from the previous logged stage. Reuses the same timeline pattern as the
+// Candidate Journey page (cj-step / cj-dot / cj-tat-chip) for consistency.
+const AUDIT_TRAIL = [
+  { stage: "Profile Created", date: "01-07-2026", time: "10:15 AM", actor: "Rahul Sharma · TA Partner", status: "done", tatDays: null,
+    desc: "Candidate profile created against Requisition #REQ-2026-001 and added to the active SAP FICO pipeline." },
+  { stage: "Interview Levels (L1 → L4)", date: "10-07-2026", time: "04:00 PM", actor: "Panel: Rahul Sharma, Anita Verma", status: "done", tatDays: 9, tags: ["L1 Cleared", "L2 Cleared", "L3 Cleared", "L4 Cleared"],
+    desc: "All four interview levels scheduled and cleared within 9 days of profile creation." },
+  { stage: "Feedback Capture Date", date: "11-07-2026", time: "11:30 AM", actor: "Anita Verma · Panel", status: "done", tatDays: 1,
+    desc: "Interview feedback logged and finalized within 1 day of the final round." },
+  { stage: "Pre-Joining Documents Mail", date: "12-07-2026", time: "09:45 AM", actor: "Srinivas Rao · HR Ops", status: "done", tatDays: 1, tags: ["Audited"],
+    desc: "Document checklist emailed to the candidate; entry logged to the audit trail for compliance tracking." },
+  { stage: "Document Receival", date: "15-07-2026", time: "06:20 PM", actor: "Candidate", status: "done", tatDays: 3, tags: ["3 Reminder Mails"],
+    desc: "All requested documents received after 3 reminder mails were sent to the candidate." },
+  { stage: "CTC Discussion", date: "17-07-2026", time: "03:00 PM", actor: "Srinivas Rao · HR Team", status: "done", tatDays: 2,
+    desc: "Compensation discussed with the candidate and final terms mutually agreed." },
+  { stage: "Rate Confirmation", date: "18-07-2026", time: "12:10 PM", actor: "Finance Desk", status: "done", tatDays: 1,
+    desc: "Billing rate confirmed internally ahead of offer approval." },
+  { stage: "Offer Approval", date: "21-07-2026", time: "05:40 PM", actor: "Approval Chain", status: "done", tatDays: 2, tags: ["Level 1", "Level 2"],
+    desc: "Offer approved across 2 internal sign-off levels before release." },
+  { stage: "Offer Release", date: "22-07-2026", time: "10:00 AM", actor: "Srinivas Rao · HR Ops", status: "done", tatDays: 1,
+    desc: "Offer letter generated and released to the candidate." },
+  { stage: "Follow-up Mails", date: "24-07 → 31-07-2026", time: "", actor: "HR Ops", status: "done", tatDays: 7, tags: ["#1", "#2", "#3", "#4"],
+    desc: "4 follow-up reminders sent tracking joining confirmation and document re-verification." },
+  { stage: "Initiated for Onboarding", date: "02-08-2026", time: "09:30 AM", actor: "Onboarding Team", status: "current", tatDays: 2,
+    desc: "Candidate handed off to the onboarding workflow — awaiting joining formalities." },
+];
+
+function auditTatChip(days){
+  if(days === null || days === undefined) return '';
+  return `<span class="cj-tat-chip cj-tat-ok"><i class="fa-regular fa-clock"></i>${days}d TAT</span>`;
+}
+
+function renderAuditSummary(){
+  const total = AUDIT_TRAIL.length;
+  const doneCount = AUDIT_TRAIL.filter(a => a.status === "done").length;
+  const cumulativeTat = AUDIT_TRAIL.reduce((sum, a) => sum + (a.tatDays || 0), 0);
+  const last = AUDIT_TRAIL[total - 1];
+  document.getElementById("auditSummaryStats").innerHTML = `
+    <div class="cj-stat"><span>Requisition ID</span><b>#REQ-2026-001</b></div>
+    <div class="cj-stat"><span>Stages Logged</span><b>${doneCount} of ${total} Completed</b></div>
+    <div class="cj-stat"><span>Cumulative TAT</span><b class="cj-tat-text-ok">${cumulativeTat} Days</b></div>
+    <div class="cj-stat"><span>Profile Created</span><b>${AUDIT_TRAIL[0].date}</b></div>
+    <div class="cj-stat"><span>Current Stage</span><span class="req-badge ${last.status === 'done' ? 'badge-active' : 'badge-review'}">${last.stage}</span></div>
+  `;
+}
+
+function renderAuditTimeline(){
+  document.getElementById("auditTimeline").innerHTML = AUDIT_TRAIL.map((a) => {
+    const icon = a.status === "done" ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-arrow-right"></i>';
+    const tagsHtml = (a.tags || []).map(t => `<span class="cj-step-tag">${t}</span>`).join("");
+    const currentTag = a.status === "current" ? '<span class="cj-step-tag">In Progress</span>' : '';
+    return `
+      <div class="cj-step ${a.status}">
+        <div class="cj-dot">${icon}</div>
+        <div class="cj-step-body">
+          <div class="cj-step-head">
+            <div class="cj-step-title">${a.stage}${currentTag}</div>
+            <div class="cj-step-head-right">${auditTatChip(a.tatDays)}<span class="cj-step-date">${a.date}${a.time ? ' · ' + a.time : ''}</span></div>
+          </div>
+          <div class="cj-step-desc">${a.desc} <span style="color:var(--text-secondary);">— Logged by ${a.actor}</span></div>
+          ${tagsHtml ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;">${tagsHtml}</div>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+renderAuditSummary();
+renderAuditTimeline();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

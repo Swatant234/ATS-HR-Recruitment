@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Screen Privileges</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'screen-privileges',
+  crumbs: [{ label: 'Screen Privileges' }]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up d1">
+      <div>
+        <h1>Screen Privileges</h1>
+        <p>Choose a role, then control which application menus it can view, create in, and edit.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLE SELECTOR -->
+  <div class="content-pad" style="padding-top:0;">
+    <div class="sp-role-card fade-up d2">
+      <div class="sp-role-field">
+        <label>Role</label>
+        <select id="spRoleSelect">
+          <option value="Admin">Admin</option>
+          <option value="Vertical Head">Vertical Head</option>
+          <option value="Manager">Manager</option>
+          <option value="Leads">Leads</option>
+          <option value="Recruiter Manager">Recruiter Manager</option>
+          <option value="Recruiter">Recruiter</option>
+          <option value="Business Operations">Business Operations</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRIVILEGE MATRIX -->
+  <div class="table-card fade-up d3">
+    <div class="table-scroll">
+      <table class="sp-table">
+        <thead>
+          <tr>
+            <th>Application Menu</th>
+            <th class="sp-check-col">
+              <label class="sp-col-check"><input type="checkbox" id="spCheckAllView"><span>View</span></label>
+            </th>
+            <th class="sp-check-col">
+              <label class="sp-col-check"><input type="checkbox" id="spCheckAllCreate"><span>Create</span></label>
+            </th>
+            <th class="sp-check-col">
+              <label class="sp-col-check"><input type="checkbox" id="spCheckAllEdit"><span>Edit</span></label>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="spTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="content-pad">
+    <div class="sp-actions fade-up d4">
+      <div class="sp-actions-status" id="spSavedNote"></div>
+      <div class="sp-actions-buttons">
+        <button type="button" class="btn-outline-soft" id="spCancelBtn">Cancel</button>
+        <button type="button" class="btn-primary-grad" id="spSaveBtn"><i class="fa-solid fa-check"></i>Save Privileges</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- APPLICATION MENUS (mirrors the sidebar nav) ----------
+const MENUS = [
+  { key:'dashboard',              label:'Dashboard',              section:'Overview' },
+  { key:'recruitment-overview',   label:'Recruitment Overview',   section:'Recruitment' },
+  { key:'requisition-initiation', label:'Requisition Initiation', section:'Recruitment' },
+  { key:'profile-database',       label:'Profile Database',       section:'Recruitment' },
+  { key:'interview-progress',     label:'Interview Progress',     section:'Recruitment' },
+  { key:'fitment-stage',          label:'Fitment Stage',          section:'Recruitment' },
+  { key:'offer-approval',         label:'Offer Approval',         section:'Offers' },
+  { key:'offer-released',         label:'Offer Released',         section:'Offers' },
+  { key:'resource-followup',      label:'Resource Follow Up',     section:'Engagement' },
+  { key:'reports',                label:'Reports',                section:'Engagement' },
+  { key:'role-configuration',     label:'Role Configuration',     section:'Configurations' },
+  { key:'screen-privileges',      label:'Screen Privileges',      section:'Configurations' },
+];
+
+const ROLES = ['Admin','Vertical Head','Manager','Leads','Recruiter Manager','Recruiter','Business Operations'];
+
+// ---------- DEFAULT PRIVILEGE SEED ----------
+function defaultPerms(role, menu){
+  if(role === 'Admin') return { view:true, create:true, edit:true };
+
+  const isConfig = menu.section === 'Configurations';
+  if(isConfig) return { view:false, create:false, edit:false };
+
+  const fullAccessRoles = ['Vertical Head','Recruiter Manager','Manager'];
+  const recruiterCreateEdit = ['requisition-initiation','profile-database','interview-progress'];
+
+  if(fullAccessRoles.includes(role)){
+    return { view:true, create:true, edit:true };
+  }
+  if(role === 'Recruiter'){
+    return { view:true, create: recruiterCreateEdit.includes(menu.key), edit: recruiterCreateEdit.includes(menu.key) };
+  }
+  if(role === 'Leads'){
+    return { view:true, create: menu.section==='Recruitment', edit:false };
+  }
+  // Business Operations
+  return { view:true, create:false, edit: menu.key==='reports' || menu.key==='resource-followup' };
+}
+
+let PRIVILEGES = {};
+ROLES.forEach(role => {
+  PRIVILEGES[role] = {};
+  MENUS.forEach(menu => { PRIVILEGES[role][menu.key] = defaultPerms(role, menu); });
+});
+
+let currentRole = 'Admin';
+let draft = null; // live edits for currentRole, applied to PRIVILEGES only on Save
+
+// ---------- RENDER ----------
+function renderMatrix(){
+  draft = JSON.parse(JSON.stringify(PRIVILEGES[currentRole]));
+
+  let lastSection = null;
+  document.getElementById('spTableBody').innerHTML = MENUS.map(menu => {
+    const sectionRow = menu.section !== lastSection
+      ? `<tr class="sp-section-row"><td colspan="4">${menu.section}</td></tr>`
+      : '';
+    lastSection = menu.section;
+    const p = draft[menu.key];
+    return `${sectionRow}
+      <tr data-key="${menu.key}">
+        <td class="sp-menu-name">${menu.label}</td>
+        <td class="sp-check-col"><input type="checkbox" class="sp-perm" data-perm="view" ${p.view ? 'checked' : ''}></td>
+        <td class="sp-check-col"><input type="checkbox" class="sp-perm" data-perm="create" ${p.create ? 'checked' : ''}></td>
+        <td class="sp-check-col"><input type="checkbox" class="sp-perm" data-perm="edit" ${p.edit ? 'checked' : ''}></td>
+      </tr>`;
+  }).join('');
+
+  document.querySelectorAll('.sp-perm').forEach(box => {
+    box.addEventListener('change', () => {
+      const key = box.closest('tr').dataset.key;
+      const perm = box.dataset.perm;
+      draft[key][perm] = box.checked;
+      syncColumnHeaderState();
+    });
+  });
+
+  syncColumnHeaderState();
+  document.getElementById('spSavedNote').textContent = '';
+}
+
+function syncColumnHeaderState(){
+  ['view','create','edit'].forEach(perm => {
+    const boxes = Array.from(document.querySelectorAll(`.sp-perm[data-perm="${perm}"]`));
+    const allChecked = boxes.every(b => b.checked);
+    document.getElementById(`spCheckAll${perm.charAt(0).toUpperCase()+perm.slice(1)}`).checked = allChecked;
+  });
+}
+
+['View','Create','Edit'].forEach(Perm => {
+  const perm = Perm.toLowerCase();
+  document.getElementById(`spCheckAll${Perm}`).addEventListener('change', (e) => {
+    const checked = e.target.checked;
+    document.querySelectorAll(`.sp-perm[data-perm="${perm}"]`).forEach(box => {
+      box.checked = checked;
+      const key = box.closest('tr').dataset.key;
+      draft[key][perm] = checked;
+    });
+  });
+});
+
+document.getElementById('spRoleSelect').addEventListener('change', (e) => {
+  currentRole = e.target.value;
+  renderMatrix();
+});
+
+document.getElementById('spCancelBtn').addEventListener('click', () => {
+  renderMatrix();
+});
+
+document.getElementById('spSaveBtn').addEventListener('click', () => {
+  PRIVILEGES[currentRole] = JSON.parse(JSON.stringify(draft));
+  const note = document.getElementById('spSavedNote');
+  note.innerHTML = `<i class="fa-solid fa-circle-check"></i> Privileges updated for <b>${currentRole}</b>`;
+});
+
+renderMatrix();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

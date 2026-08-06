@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · CTC Discussion</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'fitment-stage',
+  crumbs: [
+    { label: 'Fitment Stage', href: 'fitment-stage.html' },
+    { label: 'CTC Discussion' }
+  ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <div class="page-header fade-up">
+      <div>
+        <!-- <a href="fitment-stage.html" class="back-link"><i class="fa-solid fa-arrow-left"></i>Back to Fitment Stage</a> -->
+        <h1 id="ctcTitle">CTC Discussion Schedule Details</h1>
+        <p id="ctcSub">Schedule the compensation discussion and capture the negotiated rate details.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM CARD -->
+  <form class="form-card fade-up" id="ctcForm">
+    <div class="form-scroll">
+
+      <!-- SCHEDULE -->
+      <div class="field-grid">
+        <div class="field">
+          <label>Panel Name (Required)<span class="req">*</span></label>
+          <select required>
+            <option value="">Select Primary Panel Member</option>
+            <option>J Prabhakar</option>
+            <option>Nagaraju B</option>
+            <option>Venkat A</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Panel Name 2 (Optional)</label>
+          <select>
+            <option value="">None / Optional Peer Member</option>
+            <option>Deepak Kachare</option>
+            <option>Srinivas Rao</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grid cols-2">
+        <div class="field"><label>Meeting Date<span class="req">*</span></label><input type="date" id="fMeetingDate"></div>
+        <div class="field"><label>Meeting Time</label><input type="time" id="fMeetingTime"></div>
+      </div>
+      <div class="ctc-schedule-row">
+        <button type="button" class="btn-primary-grad" id="scheduleBtn"><i class="fa-regular fa-calendar-check"></i>Schedule</button>
+      </div>
+
+      <!-- COMPENSATION DETAILS -->
+      <div class="ov-section-title">Compensation Details</div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Current CTC (₹)</label><input type="text" id="fCurCtc" readonly></div>
+        <div class="field"><label>Expected CTC (₹)</label><input type="text" id="fExpCtc" readonly></div>
+        <div class="field">
+          <label>Notice Period</label>
+          <select id="fNotice">
+            <option>15 Days</option>
+            <option selected>30 Days</option>
+            <option>60 Days</option>
+            <option>90 Days</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Negotiated CTC (₹)</label><input type="text" id="fNegCtc"></div>
+        <div class="field"><label>Fixed CTC (₹)</label><input type="text" id="fFixedCtc"></div>
+        <div class="field"><label>Variable pay (₹)</label><input type="text" id="fVariablePay"></div>
+      </div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Joining Bonus (₹)</label><input type="text" id="fJoiningBonus"></div>
+        <div class="field">
+          <label>Relocation Required?</label>
+          <select id="fRelocation">
+            <option>Yes</option>
+            <option selected>No</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Stay accommodation?</label>
+          <select id="fStayAccommodation">
+            <option>Yes</option>
+            <option selected>No</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Budget for travel &amp; accommodation</label><input type="text" id="fBudget"></div>
+        <div class="field"><label>Tentative Date of Joining</label><input type="date" id="fTentativeDoj"></div>
+        <div class="field">
+          <label>Approver Name</label>
+          <select id="fApprover">
+            <option>J Prabhakar</option>
+            <option>Nagaraju B</option>
+            <option>Venkat A</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" style="margin-bottom:0;">
+        <label>Remarks</label>
+        <textarea id="fRemarks">Discussed the overall compensation package including fixed pay and allowances. Candidate is okay with the proposed CTC.</textarea>
+      </div>
+
+      <!-- RATE CONFIRMATION -->
+      <div class="ov-section-title">Rate Confirmation</div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Current CTC (₹)</label><input type="text" id="fRateCurCtc" readonly></div>
+        <div class="field"><label>Negotiated CTC (₹)</label><input type="text" id="fRateNegCtc"></div>
+        <div class="field"><label>Hike (%)</label><input type="text" id="fHike" readonly></div>
+      </div>
+      <div class="field" style="margin-bottom:0;">
+        <label>Approval Comments</label>
+        <textarea id="fApprovalComments">Rate approved as per the discussion and within the budget range.</textarea>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <a href="fitment-stage.html" class="btn-outline-soft" style="margin-right:auto;"><i class="fa-solid fa-arrow-left"></i> Back</a>
+      <button type="button" class="btn-warn-solid" id="btnHold"><i class="fa-regular fa-circle-pause"></i> Hold</button>
+      <button type="button" class="btn-outline-soft" id="btnRenegotiate"><i class="fa-solid fa-rotate-left"></i> Re-Negotiate</button>
+      <button type="submit" class="btn-primary-grad" id="btnApprove"><i class="fa-solid fa-check"></i>Approve</button>
+    </div>
+  </form>
+</div>
+
+<script>
+// ---------- DEMO DATA (fallback for fields not passed via URL) ----------
+const DEMO = {
+  name:'Sai Kumar P', req:'REQ001', position:'Labware LIMS Master Data',
+  curCtc:'8,00,000', expCtc:'12,00,000', negCtc:'11,00,000', rateNegCtc:'11,00,000',
+  hike:'37.5%',
+};
+
+const qp = new URLSearchParams(window.location.search);
+const get = (key) => qp.get(key) || DEMO[key] || '';
+
+const candName = get('name');
+document.getElementById('ctcSub').textContent = candName
+  ? `Schedule the compensation discussion for ${candName} and capture the negotiated rate details.`
+  : document.getElementById('ctcSub').textContent;
+
+document.getElementById('fCurCtc').value = get('curCtc') || DEMO.curCtc;
+document.getElementById('fExpCtc').value = get('expCtc') || DEMO.expCtc;
+document.getElementById('fNegCtc').value = get('negCtc') || DEMO.negCtc;
+document.getElementById('fFixedCtc').value = '8,00,000';
+document.getElementById('fVariablePay').value = '1,00,000';
+document.getElementById('fJoiningBonus').value = '1,00,000';
+document.getElementById('fBudget').value = '1,00,000';
+document.getElementById('fTentativeDoj').value = '2026-06-01';
+document.getElementById('fRateCurCtc').value = get('curCtc') || DEMO.curCtc;
+document.getElementById('fRateNegCtc').value = get('negCtc') || DEMO.rateNegCtc;
+document.getElementById('fHike').value = DEMO.hike;
+
+// ---------- SCHEDULE BUTTON ----------
+document.getElementById('scheduleBtn').addEventListener('click', function(){
+  const date = document.getElementById('fMeetingDate').value;
+  const time = document.getElementById('fMeetingTime').value;
+  if(!date){ document.getElementById('fMeetingDate').focus(); return; }
+  const original = this.innerHTML;
+  this.innerHTML = '<i class="fa-solid fa-check"></i>Scheduled';
+  this.disabled = true;
+  setTimeout(()=>{ this.innerHTML = original; this.disabled = false; }, 1800);
+});
+
+// ---------- ACTIONS ----------
+document.getElementById('btnHold').addEventListener('click', ()=>{ window.location.href = 'fitment-stage.html'; });
+document.getElementById('btnRenegotiate').addEventListener('click', ()=>{ window.location.href = 'fitment-stage.html'; });
+document.getElementById('ctcForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  window.location.href = 'fitment-stage.html';
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

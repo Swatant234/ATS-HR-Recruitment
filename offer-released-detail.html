@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRO-ATS · Offers Released</title>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <link rel="stylesheet" href="app.css">
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+  <script src="loader.js"></script>
+<script>
+    window.PAGE = {
+      active: 'offer-released',
+      crumbs: [
+        {label: 'Offer Released', href: 'offer-released.html'},
+        {label: 'Offers Released'}
+      ]
+    };
+  </script>
+
+  <div id="sidebarMount"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main" id="main">
+
+    <div id="topbarMount"></div>
+
+    <div class="content-pad">
+      <div class="page-header fade-up">
+        <div>
+          <h1>Offers Released</h1>
+          <p>Send offer letters, monitor offer acceptance, track joining status, and manage candidate follow-ups.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- DETAIL CARD -->
+    <form class="form-card ov-card fade-up" id="orDetailForm">
+      <div class="ov-card-scroll">
+
+        <!-- REQUIREMENT DETAILS -->
+        <div class="ov-section-title">Requirement Details</div>
+        <div class="field-grid">
+          <div class="field"><label>Requisition ID</label><input type="text" id="fReqId" readonly></div>
+          <div class="field"><label>TA Partner</label><input type="text" id="fTaPartner" readonly></div>
+          <div class="field"><label>Client / Customer</label><input type="text" id="fClient" readonly></div>
+          <div class="field"><label>Vertical</label><input type="text" id="fVertical" readonly></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Position / Skill</label><input type="text" id="fPosition" readonly></div>
+          <div class="field"><label>Designation</label><input type="text" id="fDesignation" readonly></div>
+          <div class="field"><label>Employment Type</label><input type="text" id="fEmpType" readonly></div>
+          <div class="field"><label>Experience Type</label><input type="text" id="fExpType" readonly></div>
+        </div>
+
+        <!-- CANDIDATE DETAILS -->
+        <div class="ov-section-title">Candidate Details</div>
+        <div class="field-grid">
+          <div class="field"><label>Employee Name (As Per Aadhar)</label><input type="text" id="fName" readonly></div>
+          <div class="field"><label>Phone Number</label><input type="tel" id="fPhone" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="field"><label>Email ID</label><input type="email" id="fEmail" readonly></div>
+          <div class="field">
+            <label>Source</label>
+            <select id="fSource">
+              <option>LinkedIn</option>
+              <option>Referral</option>
+              <option>Naukri</option>
+              <option>Company Website</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- JOINING DETAILS -->
+        <div class="ov-section-title">Joining Details</div>
+        <div class="field-grid">
+          <div class="field"><label>Location of Onboarding</label><input type="text" id="fOnboardingLoc"
+              placeholder="City / Region"></div>
+          <div class="field"><label>Reporting Manager</label><input type="text" id="fReportingManager"
+              placeholder="Full Name"></div>
+          <div class="field"><label>Offer Released Date</label><input type="text" id="fReleasedDate" readonly></div>
+          <div class="field"><label>DOJ</label><input type="text" id="fDoj" readonly></div>
+        </div>
+        <div class="field-grid cols-4">
+          <div class="field"><label>Revised DOJ</label><input type="text" id="fRevisedDoj" readonly></div>
+        </div>
+
+        <!-- COMPENSATION DETAILS -->
+        <div class="ov-section-title">Compensation Details</div>
+        <div class="field-grid">
+          <div class="field"><label>Total Offered CTC</label><input type="text" id="fTotalCtc" placeholder="₹0 LPA">
+          </div>
+          <div class="field"><label>Fixed CTC</label><input type="text" id="fFixedCtc" placeholder="₹0 LPA"></div>
+          <div class="field"><label>Variable CTC</label><input type="text" id="fVariableCtc" placeholder="₹0 LPA"></div>
+          <div class="field"><label>Joining Bonus</label><input type="text" id="fJoiningBonus" placeholder="₹0"></div>
+        </div>
+
+        <!-- REMARKS -->
+        <div class="ov-section-title">Remarks</div>
+        <div class="field" style="margin-bottom:0;">
+          <textarea id="fRemarks" placeholder="Add any additional notes…"></textarea>
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <a href="offer-released.html" class="btn-outline-soft"><i class="fa-solid fa-xmark"></i> Cancel</a>
+        <button type="submit" class="btn-primary-grad"><i class="fa-solid fa-check"></i>Offer Release</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    // ---------- DEMO DATA (fallback if a field wasn't passed in the URL) ----------
+    const DEMO = {
+      reqId: 'REQ-2026-101', ta: 'Priya Sharma', client: 'Viatris', vertical: 'Product Development',
+      position: 'Senior Front-End Developer (Angular)', designation: 'Software Engineer II',
+      empType: 'Full Time', expType: 'Experienced',
+      name: 'Rahul Kumar Reddy', email: 'rahul.reddy@example.com',
+      releasedDate: '07-Jul-2026', doj: '03-Aug-2026', revisedDoj: '10-Aug-2026',
+    };
+
+    const qp = new URLSearchParams(window.location.search);
+    const get = (key) => qp.get(key) || DEMO[key] || '—';
+
+    document.getElementById('fReqId').value = get('req') !== '—' ? get('req') : DEMO.reqId;
+    document.getElementById('fTaPartner').value = get('ta');
+    document.getElementById('fClient').value = get('client');
+    document.getElementById('fVertical').value = get('vertical');
+    document.getElementById('fPosition').value = get('position');
+    document.getElementById('fDesignation').value = get('designation');
+    document.getElementById('fEmpType').value = get('empType');
+    document.getElementById('fExpType').value = get('expType');
+    document.getElementById('fName').value = get('name');
+    document.getElementById('fEmail').value = get('email');
+    document.getElementById('fReleasedDate').value = get('releasedDate');
+    document.getElementById('fDoj').value = get('doj');
+    document.getElementById('fRevisedDoj').value = get('revisedDoj');
+
+    document.getElementById('orDetailForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.location.href = 'offer-released.html';
+    });
+  </script>
+  <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Offer Review</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'offer-approval',
+  crumbs: [
+    { label: 'Offer Approval', href: 'offer-approval.html' },
+    { label: 'Review' }
+  ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <div class="page-header fade-up">
+      <div>
+        <h1 id="ovTitle">L1 Review</h1>
+        <p id="ovSub">Review candidate and offer details, then approve, hold, or route this requisition.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW CARD -->
+  <form class="form-card ov-card fade-up" id="reviewForm">
+    <div class="ov-card-scroll">
+
+      <!-- JOB DETAILS -->
+      <div class="ov-section-title">Job Details</div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Requisition ID</label><input type="text" id="fReqId" readonly></div>
+        <div class="field"><label>Position</label><input type="text" id="fPosition" readonly></div>
+        <div class="field"><label>Client</label><input type="text" id="fClient" readonly></div>
+      </div>
+
+      <!-- CANDIDATE DETAILS -->
+      <div class="ov-section-title">Candidate Details</div>
+      <div class="field-grid">
+        <div class="field"><label>Candidate Name</label><input type="text" id="fName" readonly></div>
+        <div class="field"><label>Skill</label><input type="text" id="fSkill" readonly></div>
+        <div class="field ov-suffix-field"><label>Total Experience</label><input type="text" id="fTotalExp" readonly><span class="suffix">Yrs</span></div>
+        <div class="field ov-suffix-field"><label>Relevant Experience</label><input type="text" id="fRelExp" readonly><span class="suffix">Yrs</span></div>
+      </div>
+
+      <!-- CTC BREAKDOWN -->
+      <div class="field-grid cols-3">
+        <div class="field"><label>Current CTC</label><input type="text" id="fCurCtc" readonly></div>
+        <div class="field"><label>Expected CTC</label><input type="text" id="fExpCtc" readonly></div>
+        <div class="field"><label>Negotiated CTC</label><input type="text" id="fNegCtc" readonly></div>
+      </div>
+      <div class="field-grid cols-3">
+        <div class="field"><label>Fixed CTC</label><input type="text" id="fFixedCtc" readonly></div>
+        <div class="field"><label>Variable Pay</label><input type="text" id="fVariablePay" readonly></div>
+        <div class="field"><label>Joining Bonus</label><input type="text" id="fJoiningBonus" readonly></div>
+      </div>
+
+      <!-- NOTICE / LOCATION (L1 + L2 only) -->
+      <div class="field-grid" id="blockNoticeLocation">
+        <div class="field"><label>Notice Period</label><input type="text" id="fNotice" readonly></div>
+        <div class="field"><label>Tentative Date of Joining</label><input type="text" id="fTentativeDoj" readonly></div>
+        <div class="field"><label>Current Location</label><input type="text" id="fCurLoc" readonly></div>
+        <div class="field"><label>Preferred Location</label><input type="text" id="fPrefLoc" readonly></div>
+      </div>
+
+      <!-- NOTICE / DOJ (Revised DOJ view only) -->
+      <div class="field-grid cols-3" id="blockDojOnly" hidden>
+        <div class="field"><label>Notice Period</label><input type="text" id="fNoticeDoj" readonly></div>
+        <div class="field"><label>Tentative Date of Joining</label><input type="text" id="fTentativeDojB" readonly></div>
+        <div class="field"><label>Revised Date of Joining</label><input type="text" id="fRevisedDoj" readonly></div>
+      </div>
+
+      <!-- L1-ONLY EXTRA FIELDS -->
+      <div class="field-grid cols-3" id="blockL1Extra">
+        <div class="field"><label>Relocation Required?</label><input type="text" id="fRelocation" readonly></div>
+        <div class="field"><label>Budget for travel &amp; accommodation</label><input type="text" id="fBudget" readonly></div>
+        <div class="field">
+          <label>L2 Approval Name</label>
+          <select id="fL2Approver">
+            <option>J Prabhakar</option>
+            <option>Venkat A</option>
+            <option>Deepak Kachare</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- L1 COMMENTS (editable on L1 view) -->
+      <div id="blockL1CommentsEditable">
+        <div class="ov-section-title">L1 Comments</div>
+        <div class="field" style="margin-bottom:0;">
+          <textarea id="fL1CommentsEdit">The candidate has experience with Development. She is an immediate joiner and willing to work at Hyderabad. Recommended to be considered at the L2 level for further evaluation.</textarea>
+        </div>
+      </div>
+
+      <!-- L1 DETAILS (L2 view only) -->
+      <div id="blockL1Details" hidden>
+        <div class="ov-section-title">L1 Details</div>
+        <div class="field-grid cols-3">
+          <div class="field"><label>L1 Approved By</label><input type="text" id="fL1ApprovedBy" readonly></div>
+          <div class="field"><label>L1 Status</label><input type="text" id="fL1Status" readonly></div>
+          <div class="field"><label>L1 Approval Date</label><input type="text" id="fL1ApprovalDate" readonly></div>
+        </div>
+        <div class="field" style="margin-bottom:0;">
+          <label>L1 Comments</label>
+          <div class="ov-readonly-block" id="fL1CommentsReadonly"></div>
+        </div>
+      </div>
+
+      <!-- L2 DETAILS (L2 view only) -->
+      <div id="blockL2Details" hidden>
+        <div class="ov-section-title">L2 Details</div>
+        <div class="field" style="margin-bottom:0;">
+          <label>L2 Comments</label>
+          <textarea id="fL2Comments">L2 evaluation is satisfactory. Candidate approved.</textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-actions" id="ovActions">
+      <button type="button" class="btn-outline-soft" id="btnHold"><i class="fa-regular fa-circle-pause"></i> Hold</button>
+      <button type="button" class="btn-warn-solid" id="btnReroute" hidden><i class="fa-solid fa-rotate-left"></i>Re-route to L1</button>
+      <button type="submit" class="btn-primary-grad" id="btnApprove"><i class="fa-solid fa-check"></i>Approve</button>
+    </div>
+  </form>
+</div>
+
+<script>
+// ---------- DEMO DATA (same candidate shown across all three review levels) ----------
+const DEMO = {
+  reqId:'REQ-2026-102', position:'Senior UI/UX Designer', client:'Viatris',
+  name:'Shukrutha B L', skill:'Figma, Adobe PhotoShop', totalExp:'2', relExp:'2',
+  curCtc:'6,00,000', expCtc:'10,00,000', negCtc:'8,50,000',
+  fixedCtc:'8,00,000', variablePay:'1,00,000', joiningBonus:'50,000',
+  notice:'60 Days', tentativeDoj:'11-05-2026', revisedDoj:'12-06-2026',
+  curLoc:'Mysore', prefLoc:'Hyderabad',
+  relocation:'Yes', budget:'0',
+  l1ApprovedBy:'Nagaraju B', l1Status:'Approved', l1ApprovalDate:'01-07-2026',
+  l1Comments:'The candidate has experience with Development. She is an immediate joiner and willing to work at Hyderabad. Recommended to be considered at the L2 level for further evaluation.',
+};
+
+// ---------- READ QUERY PARAMS (row clicked in Offer Approval table) ----------
+const qp = new URLSearchParams(window.location.search);
+const level = qp.get('level') || 'l1'; // 'l1' | 'l2' | 'doj'
+
+const data = {
+  ...DEMO,
+  reqId: qp.get('req') || DEMO.reqId,
+  position: qp.get('position') || DEMO.position,
+  client: qp.get('client') || DEMO.client,
+  name: qp.get('name') || DEMO.name,
+};
+
+// ---------- FILL FIELDS ----------
+document.getElementById('fReqId').value = data.reqId;
+document.getElementById('fPosition').value = data.position;
+document.getElementById('fClient').value = data.client;
+document.getElementById('fName').value = data.name;
+document.getElementById('fSkill').value = data.skill;
+document.getElementById('fTotalExp').value = data.totalExp;
+document.getElementById('fRelExp').value = data.relExp;
+document.getElementById('fCurCtc').value = data.curCtc;
+document.getElementById('fExpCtc').value = data.expCtc;
+document.getElementById('fNegCtc').value = data.negCtc;
+document.getElementById('fFixedCtc').value = data.fixedCtc;
+document.getElementById('fVariablePay').value = data.variablePay;
+document.getElementById('fJoiningBonus').value = data.joiningBonus;
+document.getElementById('fNotice').value = data.notice;
+document.getElementById('fTentativeDoj').value = data.tentativeDoj;
+document.getElementById('fCurLoc').value = data.curLoc;
+document.getElementById('fPrefLoc').value = data.prefLoc;
+document.getElementById('fRelocation').value = data.relocation;
+document.getElementById('fBudget').value = data.budget;
+document.getElementById('fNoticeDoj').value = data.notice;
+document.getElementById('fTentativeDojB').value = data.tentativeDoj;
+document.getElementById('fRevisedDoj').value = data.revisedDoj;
+document.getElementById('fL1ApprovedBy').value = data.l1ApprovedBy;
+document.getElementById('fL1Status').value = data.l1Status;
+document.getElementById('fL1ApprovalDate').value = data.l1ApprovalDate;
+document.getElementById('fL1CommentsReadonly').textContent = data.l1Comments;
+
+// ---------- SWITCH LAYOUT BY LEVEL ----------
+const ovSub = document.getElementById('ovSub');
+const btnReroute = document.getElementById('btnReroute');
+
+if(level === 'l1'){
+  document.getElementById('ovTitle').textContent = 'Manager Approval';
+  ovSub.textContent = 'Review candidate and offer details, then approve, hold, or route this requisition.';
+  document.title = 'PRO-ATS · L1 Review';
+
+}else if(level === 'l2'){
+  document.getElementById('ovTitle').textContent = 'Vertical Approval';
+  ovSub.textContent = 'Review the L1 decision alongside candidate and offer details before approving, holding, or re-routing.';
+  document.title = 'PRO-ATS · L2 Review';
+
+  document.getElementById('blockL1Extra').hidden = true;
+  document.getElementById('blockL1CommentsEditable').hidden = true;
+  document.getElementById('blockL1Details').hidden = false;
+  document.getElementById('blockL2Details').hidden = false;
+  btnReroute.hidden = false;
+
+}else if(level === 'doj'){
+  document.getElementById('ovTitle').textContent = 'Revised Date of Joining';
+  ovSub.textContent = 'Review the revised joining date and approve, hold, or route this requisition.';
+  document.title = 'PRO-ATS · Revised Date of Joining';
+
+  // Revised DOJ view is a slimmer form — hide the sections not shown in that screenshot
+  document.getElementById('blockNoticeLocation').hidden = true;
+  document.getElementById('blockDojOnly').hidden = false;
+  document.getElementById('blockL1Extra').hidden = true;
+  document.getElementById('blockL1CommentsEditable').hidden = true;
+}
+
+// ---------- ACTIONS ----------
+document.getElementById('btnHold').addEventListener('click', () => {
+  window.location.href = 'offer-approval.html';
+});
+btnReroute.addEventListener('click', () => {
+  window.location.href = 'offer-approval.html';
+});
+document.getElementById('reviewForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  window.location.href = 'offer-approval.html';
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

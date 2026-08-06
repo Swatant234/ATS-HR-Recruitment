@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Interview Progress</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'interview-progress',
+  crumbs: [ { label: 'Interview Progress' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Interview Progress</h1>
+        <p>Schedule interviews, collect interviewer feedback, track interview status, and manage interview rounds.</p>
+      </div>
+    </div>
+
+    <!-- LEVEL TABS -->
+    <div class="section-label fade-up">Interview Levels</div>
+    <div class="step-tiles fade-up d1" id="lvlTabs"></div>
+  </div>
+
+  <!-- CANDIDATE MATRIX WORKSPACE -->
+  <div class="req-toolbar-card table-card fade-up d2">
+    <div class="req-toolbar">
+      <span class="req-toolbar-title" id="workspaceTitle">Candidate Matrix Workspace</span>
+      <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="ipSearch" placeholder="Search"></div>
+      <select class="filter-select" id="ipVertical">
+        <option value="">Select Vertical</option>
+        <option>SAP</option>
+        <option>.NET</option>
+        <option>CSV</option>
+        <option>LIMS</option>
+        <option>Python</option>
+      </select>
+      <select class="filter-select" id="ipPriority">
+        <option value="">Select Priority</option>
+        <option>Critical</option>
+        <option>High</option>
+        <option>Medium</option>
+        <option>Low</option>
+      </select>
+      <button class="clear-chip" id="ipClear"><i class="fa-solid fa-xmark"></i>Clear All</button>
+    </div>
+
+    <div class="table-scroll">
+      <table class="req-table ip-table">
+        <thead>
+          <tr>
+            <th>S.No</th><th>Requisition ID</th><th>Vertical</th><th>Position</th><th>Priority</th>
+            <th>Open Positions</th><th>Interview TBD</th><th>Interview Scheduled</th>
+            <th>Feedback Pending</th><th>Selected</th><th>Rejected</th><th>Hold</th>
+          </tr>
+        </thead>
+        <tbody id="ipTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b id="ipShowingCount">0</b> of <b id="ipTotalCount">0</b> requisitions</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- DATA — candidates grouped by interview level ----------
+const LEVELS = {
+  1: [
+    {req:"REQ-25678", vertical:"SAP",    position:"SAP FICO Consultant",       priority:"High",     open:5, tbd:3, scheduled:2, feedback:3, selected:4, rejected:2, hold:1},
+    {req:"REQ-25679", vertical:".NET",   position:".NET Full Stack Developer", priority:"Critical", open:3, tbd:1, scheduled:2, feedback:2, selected:2, rejected:1, hold:0},
+    {req:"REQ-25680", vertical:"CSV",    position:"CSV Validation Engineer",   priority:"Medium",   open:4, tbd:2, scheduled:1, feedback:1, selected:1, rejected:0, hold:1},
+    {req:"REQ-25681", vertical:"LIMS",   position:"LIMS Administrator",        priority:"Low",      open:2, tbd:1, scheduled:0, feedback:1, selected:0, rejected:0, hold:0},
+    {req:"REQ-25682", vertical:"Python", position:"Python Backend Developer",  priority:"High",     open:6, tbd:2, scheduled:3, feedback:2, selected:3, rejected:1, hold:0},
+  ],
+  2: [
+    {req:"REQ-25678", vertical:"SAP",    position:"SAP FICO Consultant",       priority:"High",     open:5, tbd:2, scheduled:2, feedback:2, selected:2, rejected:1, hold:0},
+    {req:"REQ-25679", vertical:".NET",   position:".NET Full Stack Developer", priority:"Critical", open:3, tbd:1, scheduled:1, feedback:1, selected:1, rejected:0, hold:0},
+    {req:"REQ-25682", vertical:"Python", position:"Python Backend Developer",  priority:"High",     open:6, tbd:1, scheduled:2, feedback:1, selected:2, rejected:0, hold:1},
+  ],
+  3: [
+    {req:"REQ-25678", vertical:"SAP",    position:"SAP FICO Consultant",       priority:"High", open:5, tbd:1, scheduled:1, feedback:1, selected:1, rejected:0, hold:0},
+    {req:"REQ-25682", vertical:"Python", position:"Python Backend Developer",  priority:"High", open:6, tbd:0, scheduled:1, feedback:1, selected:1, rejected:0, hold:0},
+  ],
+  4: [
+    {req:"REQ-25678", vertical:"SAP", position:"SAP FICO Consultant", priority:"High", open:5, tbd:2, scheduled:1, feedback:1, selected:1, rejected:0, hold:0},
+  ],
+};
+
+const priorityClass = p => ({Critical:"pri-critical", High:"pri-high", Medium:"pri-medium", Low:"pri-low"}[p] || "pri-medium");
+
+let activeLevel = 4;
+
+function renderTabs(){
+  const wrap = document.getElementById("lvlTabs");
+  wrap.innerHTML = [1,2,3,4].map(n => `
+    <button type="button" class="step-tile${n===activeLevel ? ' active' : ''}" data-level="${n}">
+      <div class="step-tile-badge">L${n}</div>
+      <div class="step-tile-body">
+        <div class="step-tile-sub">Level</div>
+        <div class="step-tile-label">Round ${n}</div>
+      </div>
+      <div class="step-tile-count">${LEVELS[n].length}</div>
+    </button>
+  `).join("");
+
+  wrap.querySelectorAll(".step-tile").forEach(card => {
+    card.addEventListener("click", () => {
+      activeLevel = Number(card.dataset.level);
+      renderTabs();
+      renderTable();
+    });
+  });
+}
+
+function renderTable(){
+  document.getElementById("workspaceTitle").textContent = `Level (L${activeLevel}) Candidate Matrix Workspace`;
+
+  const search = document.getElementById("ipSearch").value.trim().toLowerCase();
+  const vertical = document.getElementById("ipVertical").value;
+  const priority = document.getElementById("ipPriority").value;
+
+  const rows = LEVELS[activeLevel].filter(r => {
+    if(vertical && r.vertical !== vertical) return false;
+    if(priority && r.priority !== priority) return false;
+    if(search && !(r.req.toLowerCase().includes(search) || r.position.toLowerCase().includes(search))) return false;
+    return true;
+  });
+
+  const body = document.getElementById("ipTableBody");
+  document.getElementById("ipShowingCount").textContent = rows.length;
+  document.getElementById("ipTotalCount").textContent = rows.length;
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="12"><div class="ip-empty">No candidates match this level and filter combination.</div></td></tr>`;
+    return;
+  }
+
+  body.innerHTML = rows.map((r,i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+      <td>${r.vertical}</td>
+      <td>${r.position}</td>
+      <td><span class="pri-badge ${priorityClass(r.priority)}">${r.priority}</span></td>
+      <td class="num-cell">${r.open}</td>
+      <td class="num-cell">${r.tbd}</td>
+      <td class="num-cell">${r.scheduled}</td>
+      <td class="num-cell">${r.feedback}</td>
+      <td class="num-cell">${r.selected}</td>
+      <td class="num-cell">${r.rejected}</td>
+      <td class="num-cell">${r.hold}</td>
+    </tr>
+  `).join("");
+}
+
+document.getElementById("ipSearch").addEventListener("input", renderTable);
+document.getElementById("ipVertical").addEventListener("change", renderTable);
+document.getElementById("ipPriority").addEventListener("change", renderTable);
+document.getElementById("ipClear").addEventListener("click", () => {
+  document.getElementById("ipSearch").value = "";
+  document.getElementById("ipVertical").value = "";
+  document.getElementById("ipPriority").value = "";
+  renderTable();
+});
+
+renderTabs();
+renderTable();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

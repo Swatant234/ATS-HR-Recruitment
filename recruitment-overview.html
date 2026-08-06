@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Recruitment Overview</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'recruitment-overview',
+  crumbs: [ { label: 'Recruitment Overview' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="page-scroll">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Recruitment Overview</h1>
+        <p>Bird's-eye view of active pipelines, approvals and hiring performance across all verticals.</p>
+      </div>
+    </div>
+
+    <!-- KEY METRICS -->
+    <div class="section-label fade-up">Key Metrics</div>
+    <div class="ro-kpi-grid fade-up d1">
+      <div class="ro-kpi-card">
+        <div><div class="label">Total Open Positions</div><div class="num" style="color:var(--accent)">43</div></div>
+        <div class="stat-icon-box" style="--icon-color:#2563EB"><i class="fa-solid fa-briefcase"></i></div>
+      </div>
+      <div class="ro-kpi-card">
+        <div><div class="label">Offers Released</div><div class="num" style="color:#D97706">9</div></div>
+        <div class="stat-icon-box" style="--icon-color:#F59E0B"><i class="fa-solid fa-paper-plane"></i></div>
+      </div>
+      <div class="ro-kpi-card">
+        <div><div class="label">Joined This Month</div><div class="num" style="color:#16A34A">5</div></div>
+        <div class="stat-icon-box" style="--icon-color:#22C55E"><i class="fa-solid fa-user-check"></i></div>
+      </div>
+      <div class="ro-kpi-card">
+        <div><div class="label">Yet to Join</div><div class="num" style="color:#DB2777">11</div></div>
+        <div class="stat-icon-box" style="--icon-color:#EC4899"><i class="fa-regular fa-clock"></i></div>
+      </div>
+    </div>
+
+    <!-- APPROVAL WORKFLOW -->
+    <div class="section-label fade-up">Approval Workflow</div>
+    <div class="ro-approval-grid fade-up d2">
+      <div class="ro-approval-card" style="--icon-color:#F59E0B">
+        <div><div class="label">Approvals Pending</div><div class="num">5</div><div class="sub">Awaiting review</div></div>
+        <div class="stat-icon-box" style="--icon-color:#F59E0B"><i class="fa-regular fa-circle-check"></i></div>
+      </div>
+      <div class="ro-approval-card" style="--icon-color:#EF4444">
+        <div><div class="label">Hold</div><div class="num">7</div><div class="sub">Temporarily paused</div></div>
+        <div class="stat-icon-box" style="--icon-color:#EF4444"><i class="fa-solid fa-hand"></i></div>
+      </div>
+      <div class="ro-approval-card" style="--icon-color:#6B7280">
+        <div><div class="label">No Show</div><div class="num">2</div><div class="sub">Candidate did not attend</div></div>
+        <div class="stat-icon-box" style="--icon-color:#6B7280"><i class="fa-solid fa-user-xmark"></i></div>
+      </div>
+    </div>
+
+    <!-- PIPELINE ANALYTICS -->
+    <div class="section-label fade-up">Pipeline Analytics</div>
+    <div class="chart-grid fade-up d3">
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <div class="chart-title">Positions by Vertical</div>
+          <div class="chart-legend-mini"><span class="dot"></span>Open Positions</div>
+        </div>
+        <div class="hbar-wrap" id="verticalHBar"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-head"><div class="chart-title">Pipeline Status Distribution</div></div>
+        <div class="donut-row">
+          <div class="donut-wrap"><div class="css-donut" id="statusDonut"></div></div>
+          <div class="donut-legend">
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#F59E0B"></span>Offers Released</div><span class="dl-pct">9</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#EC4899"></span>Yet to Join</div><span class="dl-pct">11</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#22C55E"></span>Joined</div><span class="dl-pct">5</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#EF4444"></span>No Show</div><span class="dl-pct">2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-grid fade-up d4">
+      <div class="chart-card">
+        <div class="chart-card-head"><div class="chart-title">Recruitment Funnel</div></div>
+        <div class="bar-wrap" id="funnelBar"></div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-head"><div class="chart-title">Monthly Hiring Trend</div></div>
+        <div class="line-chart-wrap">
+          <svg id="hiringTrendSvg" viewBox="0 0 480 170" preserveAspectRatio="none"></svg>
+          <div class="line-chart-labels" id="hiringTrendLabels"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE DETAILS -->
+    <div class="section-label">Pipeline Details</div>
+    <div class="req-toolbar-card fade-up">
+      <div class="req-toolbar">
+        <span class="req-toolbar-title">Recruitment Pipeline Overview</span>
+        <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="roSearch" placeholder="Search"></div>
+        <select class="filter-select" id="roVerticalFilter"><option value="">All Verticals</option></select>
+        <select class="filter-select" id="roStatusFilter"><option value="">Status</option><option>Active</option><option>Hold</option></select>
+        <button class="clear-chip" id="roClear"><i class="fa-solid fa-xmark"></i>Clear All</button>
+      </div>
+
+      <div class="table-scroll" style="overflow-x:auto;">
+        <table class="req-table ro-table">
+          <thead>
+            <tr>
+              <th>S.No</th><th>SOW No</th><th>Requisition ID</th><th>Vertical</th><th>Status</th><th>Skill</th>
+              <th>Total Open</th><th>Offers</th><th>Joined</th><th>No Show</th><th>Yet to Join</th><th>Vendor</th><th>Mapped</th><th>Balance</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="roTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="pager-bar">
+        <div class="pager-info" id="roPagerInfo">Showing<b>0</b> of <b>0</b></div>
+        <div class="pager">
+          <button><i class="fa-solid fa-angles-left"></i></button>
+          <button class="active">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button><i class="fa-solid fa-angles-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- INDIVIDUAL COUNT POPUP -->
+<div class="form-modal-backdrop" id="countModalBackdrop">
+  <div class="form-modal ro-count-modal">
+    <div class="config-card-head">
+      <h2 id="countModalTitle">Offers Released</h2>
+      <button type="button" class="modal-close" id="countCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="config-card-body">
+      <div class="ro-count-stats">
+        <div class="ro-count-box">
+          <div class="lbl">Total Count</div>
+          <div class="val cnt-green" id="countTotal">0</div>
+        </div>
+        <div class="ro-count-box">
+          <div class="lbl">Vertical</div>
+          <div class="val" id="countVertical">—</div>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="ro-mini-table">
+          <thead>
+            <tr><th>S.No</th><th>Candidate</th><th>Role</th><th>Recruiter</th><th>DOJ</th><th>Source</th></tr>
+          </thead>
+          <tbody id="countTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPEN DETAILED VIEW POPUP -->
+<div class="form-modal-backdrop" id="detailModalBackdrop">
+  <div class="form-modal ro-detail-modal">
+    <div class="config-card-head">
+      <div>
+        <h2>Recruitment Overview</h2>
+        <p>Monitor all active hiring pipelines, track recruitment KPIs, and get real-time insights on pipeline health.</p>
+      </div>
+      <button type="button" class="modal-close" id="detailCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="config-card-body">
+      <div class="ro-detail-head">
+        <div class="ro-detail-headline">
+          <span class="req-badge badge-review" id="detailReqId">REQ-25678</span>
+          <h3 id="detailTitle">Product Engineering</h3>
+        </div>
+        <div class="ro-detail-sourced">Sourced : <b id="detailSourced">10</b></div>
+      </div>
+
+      <div class="ro-detail-section-label">Interview Funnel</div>
+      <div class="table-scroll">
+        <table class="ro-mini-table ro-funnel-table">
+          <thead>
+            <tr>
+              <th>Round</th>
+              <th>TBD</th>
+              <th>Scheduled</th><th class="ro-tat-col">Scheduled TAT</th>
+              <th>Selected</th><th class="ro-tat-col">Selected TAT</th>
+              <th>Feedback Pending</th><th class="ro-tat-col">Feedback Pending TAT</th>
+              <th>Rejected</th><th class="ro-tat-col">Rejected TAT</th>
+            </tr>
+          </thead>
+          <tbody id="detailFunnelBody"></tbody>
+        </table>
+      </div>
+
+      <div class="ro-detail-section-label">Post Interview &amp; Other Stages</div>
+      <div class="ro-stage-flow" id="detailStageFlow"></div>
+      <div class="ro-stage-grid" id="detailStages"></div>
+
+      <div class="ro-detail-section-label">Menu</div>
+      <div class="ro-menu-grid" id="detailMenu"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------- PIPELINE DATA ----------
+const pipeline = [
+  {sowNo:"PT-SOW-90012-FY25", reqId:"REQ-25678", vertical:"SAP",               status:"Active", skill:"SAP Configuration",   totalOpen:8, offers:2, joined:1, noShow:0, yetToJoin:2, vendor:3, mapped:1, balance:5},
+  {sowNo:"PT-SOW-90012-FY25", reqId:"REQ-25678", vertical:"CSV",               status:"Active", skill:"Data Integration",    totalOpen:8, offers:2, joined:1, noShow:0, yetToJoin:2, vendor:3, mapped:1, balance:5},
+  {sowNo:"PT-SOW-90012-FY25", reqId:"REQ-25678", vertical:"LIMS",              status:"Active", skill:"Lab Management",      totalOpen:8, offers:2, joined:1, noShow:0, yetToJoin:2, vendor:3, mapped:1, balance:5},
+  {sowNo:"PT-SOW-90012-FY25", reqId:"REQ-25678", vertical:"Product Development",status:"Active", skill:"Product Engineering", totalOpen:8, offers:2, joined:1, noShow:0, yetToJoin:2, vendor:3, mapped:1, balance:5},
+  {sowNo:"PT-SOW-90012-FY25", reqId:"REQ-25678", vertical:"Sales",             status:"Active", skill:"B2B Sales",           totalOpen:8, offers:2, joined:1, noShow:0, yetToJoin:2, vendor:3, mapped:1, balance:5},
+];
+
+const verticals = [...new Set(pipeline.map(p => p.vertical))];
+document.getElementById("roVerticalFilter").insertAdjacentHTML("beforeend",
+  verticals.map(v => `<option>${v}</option>`).join(""));
+
+// count column meta — label shown in the popup + color class
+const COUNT_COLS = {
+  totalOpen: { label:"Total Open",  cls:"cnt-orange" },
+  offers:    { label:"Offers Released", cls:"cnt-green" },
+  joined:    { label:"Joined",      cls:"cnt-teal" },
+  noShow:    { label:"No Show",     cls:"cnt-plain" },
+  yetToJoin: { label:"Yet to Join", cls:"cnt-pink" },
+  vendor:    { label:"Vendor",      cls:"cnt-indigo" },
+  mapped:    { label:"Mapped",      cls:"cnt-blue" },
+  balance:   { label:"Balance",     cls:"cnt-violet" },
+};
+
+function renderTable(){
+  const q = document.getElementById("roSearch").value.trim().toLowerCase();
+  const vf = document.getElementById("roVerticalFilter").value;
+  const sf = document.getElementById("roStatusFilter").value;
+
+  const rows = pipeline.filter(r =>
+    (!q || r.reqId.toLowerCase().includes(q) || r.vertical.toLowerCase().includes(q) || r.skill.toLowerCase().includes(q)) &&
+    (!vf || r.vertical === vf) &&
+    (!sf || r.status === sf)
+  );
+
+  document.getElementById("roTableBody").innerHTML = rows.map((r,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${r.sowNo}</td>
+      <td><a href="#" class="req-id-link">#${r.reqId}</a></td>
+      <td>${r.vertical}</td>
+      <td><span class="req-badge ${r.status === 'Active' ? 'badge-active' : 'badge-hold'}"><i class="fa-solid fa-circle-check" style="font-size:9px;margin-right:4px;"></i>${r.status}</span></td>
+      <td>${r.skill}</td>
+      ${Object.keys(COUNT_COLS).map(key => `
+        <td class="num-cell clickable ${COUNT_COLS[key].cls}" data-row="${i}" data-col="${key}">${r[key]}</td>
+      `).join('')}
+      <td><button type="button" class="btn-outline-soft ro-detail-btn" data-row="${i}" style="padding:7px 14px;font-size:11.5px;">Open Detailed View</button></td>
+    </tr>
+  `).join("");
+
+  document.getElementById("roPagerInfo").innerHTML = `Showing Out <b>${rows.length}</b> of <b>${pipeline.length}</b> Items`;
+
+  // wire count-cell clicks → count popup
+  document.querySelectorAll("#roTableBody .clickable").forEach(cell => {
+    cell.addEventListener("click", () => openCountModal(rows[cell.dataset.row], cell.dataset.col));
+  });
+  // wire "Open Detailed View" → detail popup
+  document.querySelectorAll("#roTableBody .ro-detail-btn").forEach(btn => {
+    btn.addEventListener("click", () => openDetailModal(rows[btn.dataset.row]));
+  });
+}
+["roSearch","roVerticalFilter","roStatusFilter"].forEach(id=>{
+  document.getElementById(id).addEventListener("input", renderTable);
+  document.getElementById(id).addEventListener("change", renderTable);
+});
+document.getElementById("roClear").addEventListener("click", ()=>{
+  document.getElementById("roSearch").value = "";
+  document.getElementById("roVerticalFilter").value = "";
+  document.getElementById("roStatusFilter").value = "";
+  renderTable();
+});
+renderTable();
+
+// ---------- INDIVIDUAL COUNT POPUP ----------
+const CANDIDATE_POOL = [
+  {name:"Arjun Nair",    role:"Dot Net Developer",  source:"Linkedin"},
+  {name:"Suresh Iyer",   role:"DevOps Engineer",    source:"Naukri"},
+  {name:"Meera Krishnan",role:"QA Engineer",        source:"Referral"},
+  {name:"Devika Nair",   role:"SAP Consultant",     source:"Linkedin"},
+  {name:"Anil Bose",     role:"Data Engineer",      source:"Naukri"},
+  {name:"Sneha Kulkarni",role:"Backend Developer",  source:"Vendor"},
+];
+
+function openCountModal(row, key){
+  const meta = COUNT_COLS[key];
+  const count = row[key];
+  document.getElementById("countModalTitle").textContent = meta.label;
+  document.getElementById("countTotal").textContent = count;
+  document.getElementById("countVertical").textContent = row.vertical;
+
+  const rowsHtml = Array.from({length: count}).map((_, i) => {
+    const c = CANDIDATE_POOL[i % CANDIDATE_POOL.length];
+    return `
+      <tr>
+        <td>${i+1}</td>
+        <td>${c.name}</td>
+        <td>${c.role}</td>
+        <td>Prakash Reddy</td>
+        <td>08-07-2026</td>
+        <td>${c.source}</td>
+      </tr>`;
+  }).join("");
+
+  document.getElementById("countTableBody").innerHTML = rowsHtml ||
+    `<tr><td colspan="6"><div class="oa-empty">No records for this count.</div></td></tr>`;
+
+  countBackdrop.classList.add("show");
+}
+const countBackdrop = document.getElementById("countModalBackdrop");
+document.getElementById("countCloseBtn").addEventListener("click", () => countBackdrop.classList.remove("show"));
+countBackdrop.addEventListener("click", (e) => { if(e.target === countBackdrop) countBackdrop.classList.remove("show"); });
+
+// ---------- OPEN DETAILED VIEW POPUP ----------
+function tatChip(days){
+  if(days === null || days === undefined){
+    return `<span class="ro-tat-chip ro-tat-empty">—</span>`;
+  }
+  return `<span class="ro-tat-chip"><i class="fa-regular fa-clock"></i>${days}d</span>`;
+}
+// Build a realistic, cascading interview funnel (L1 → L4) scaled to how many
+// candidates were actually sourced for this requisition. Each round's
+// "Scheduled" count carries over from the previous round's "Selected" count,
+// so the numbers always add up round to round.
+function buildFunnel(row){
+  const sourced = row.totalOpen + 2;
+  const passRate   = [0.75, 0.68, 0.72, 0.60]; // % of "scheduled" who clear the round
+  const rejectRate = [0.15, 0.20, 0.20, 0.30]; // % of "scheduled" who are rejected
+  const schedTat   = [2, 3, 4, 3];             // days to get interview scheduled
+  const selTat     = [3, 4, 4, 2];             // days from interview to selection
+  const fbTat      = [1, 2, 2, 1];             // days feedback has been pending
+  const rejTat     = [2, 3, 3, 2];             // days to communicate rejection
+  const names = ["L1","L2","L3","L4"];
+
+  let carry = sourced - 1; // 1 candidate still TBD (yet to be scheduled) at L1
+  const rounds = [];
+  for(let i=0;i<4;i++){
+    const scheduled = Math.max(1, carry);
+    let selected = Math.round(scheduled * passRate[i]);
+    let rejected = Math.round(scheduled * rejectRate[i]);
+    let feedbackPending = scheduled - selected - rejected;
+    if(feedbackPending < 0){ rejected += feedbackPending; feedbackPending = 0; }
+    rounds.push({
+      round: names[i],
+      tbd: i === 0 ? Math.max(0, sourced - 1 - scheduled) : 0,
+      scheduled, scheduledTat: schedTat[i],
+      selected, selectedTat: selTat[i],
+      feedbackPending, feedbackPendingTat: feedbackPending > 0 ? fbTat[i] : null,
+      rejected, rejectedTat: rejected > 0 ? rejTat[i] : null,
+    });
+    carry = selected;
+  }
+  return rounds;
+}
+
+function openDetailModal(row){
+  document.getElementById("detailReqId").textContent = row.reqId;
+  document.getElementById("detailTitle").textContent = row.skill;
+  const sourced = row.totalOpen + 2;
+  document.getElementById("detailSourced").textContent = sourced;
+
+  const funnel = buildFunnel(row);
+  document.getElementById("detailFunnelBody").innerHTML = funnel.map(r => `
+    <tr>
+      <td>${r.round}</td>
+      <td>${r.tbd}</td>
+      <td>${r.scheduled}</td><td class="ro-tat-col">${tatChip(r.scheduledTat)}</td>
+      <td>${r.selected}</td><td class="ro-tat-col">${tatChip(r.selectedTat)}</td>
+      <td>${r.feedbackPending}</td><td class="ro-tat-col">${tatChip(r.feedbackPendingTat)}</td>
+      <td>${r.rejected}</td><td class="ro-tat-col">${tatChip(r.rejectedTat)}</td>
+    </tr>
+  `).join("");
+
+  // Post-interview pipeline: everyone finally selected (last round) moves into
+  // paperwork → CTC discussion → offer approval → rate confirmation. A couple
+  // drop off along the way, mirroring the row's actual offers/joined figures.
+  const finalSelected = funnel[3].selected;
+  const docsCollected  = finalSelected;
+  const ctcDiscussion  = Math.max(0, docsCollected - 1);
+  const offerApproval  = row.offers;
+  const rateConfirm    = Math.max(0, row.joined + row.yetToJoin);
+  const flowStages = [
+    ["Documents Collection", docsCollected],
+    ["CTC Discussion",       ctcDiscussion],
+    ["Offer Approval",       offerApproval],
+    ["Rate Confirmation",    rateConfirm],
+  ];
+  const flowTat = [2, 3, 2]; // days spent moving between each consecutive stage above
+  document.getElementById("detailStageFlow").innerHTML = flowStages.map(([label,val], i) => {
+    const pill = `<div class="ro-flow-pill"><span>${label}</span><b>${val}</b></div>`;
+    if(i === flowStages.length - 1) return pill;
+    return pill + `<div class="ro-flow-arrow"><i class="fa-solid fa-arrow-right"></i>${tatChip(flowTat[i])}</div>`;
+  }).join("");
+
+  // Drop-off / on-hold reasons across the whole requisition lifecycle
+  const stages = [
+    ["Not In Budget",      1],
+    ["Screening Rejected", 4],
+    ["Not Interested",     2],
+    ["Hold Profiles",      1],
+    ["Req Hold",           row.status === "Hold" ? 1 : 0],
+  ];
+  document.getElementById("detailStages").innerHTML = stages.map(([label,val]) => `
+    <div class="ro-stage-pill"><span>${label}</span><b>${val}</b></div>
+  `).join("");
+
+  const menu = [
+    ["Screening Rejected", 4,             "cnt-plain"],
+    ["Resource Joined",    row.joined,    "cnt-green"],
+    ["Offers No Show",     row.noShow,    "cnt-plain"],
+    ["Yet to Join",        row.yetToJoin, "cnt-pink"],
+    ["Vendor Joining",     row.vendor,    "cnt-indigo"],
+    ["Mapped Internally",  row.mapped,    "cnt-blue"],
+    ["Balance Open",       row.balance,   "cnt-violet"],
+  ];
+  document.getElementById("detailMenu").innerHTML = menu.map(([label,val,cls]) => `
+    <div class="ro-menu-card"><div class="lbl">${label}</div><div class="val ${cls}">${val}</div></div>
+  `).join("");
+
+  detailBackdrop.classList.add("show");
+}
+const detailBackdrop = document.getElementById("detailModalBackdrop");
+document.getElementById("detailCloseBtn").addEventListener("click", () => detailBackdrop.classList.remove("show"));
+detailBackdrop.addEventListener("click", (e) => { if(e.target === detailBackdrop) detailBackdrop.classList.remove("show"); });
+
+// ---------- CHARTS (pure CSS/SVG — no external chart library) ----------
+function renderCharts(){
+  // Positions by Vertical — horizontal bars
+  const verticalData = [
+    { label: "SAP",    value: 5 },
+    { label: ".NET",   value: 7 },
+    { label: "CSV",    value: 6 },
+    { label: "LIMS",   value: 9 },
+    { label: "Python", value: 5 },
+  ];
+  const max = Math.max(...verticalData.map(v => v.value));
+  document.getElementById("verticalHBar").innerHTML = verticalData.map(v => `
+    <div class="hbar-row">
+      <div class="hbar-label">${v.label}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${Math.round((v.value/max)*100)}%"></div></div>
+      <div class="hbar-val">${v.value}</div>
+    </div>
+  `).join("");
+
+  // Pipeline Status Distribution donut
+  const status = [
+    { pct: 33.33, color: "#F59E0B" }, // Offers Released
+    { pct: 40.74, color: "#EC4899" }, // Yet to Join
+    { pct: 18.52, color: "#22C55E" }, // Joined
+    { pct: 7.41,  color: "#EF4444" }, // No Show
+  ];
+  let acc = 0;
+  const stops = status.map(s => { const from = acc; acc += s.pct; return `${s.color} ${from}% ${acc}%`; }).join(", ");
+  document.getElementById("statusDonut").style.background = `conic-gradient(${stops})`;
+
+  // Recruitment Funnel — vertical bars
+  const funnel = [
+    { label: "Sourced",    value: 120 },
+    { label: "Screened",   value: 78 },
+    { label: "Interviewed",value: 46 },
+    { label: "Offered",    value: 9 },
+    { label: "Joined",     value: 5 },
+  ];
+  const fmax = Math.max(...funnel.map(v => v.value));
+  document.getElementById("funnelBar").innerHTML = funnel.map(v => `
+    <div class="vbar-col">
+      <div class="vbar-val">${v.value}</div>
+      <div class="vbar" style="height:${Math.round((v.value/fmax)*100)}%"></div>
+      <div class="vbar-label">${v.label}</div>
+    </div>
+  `).join("");
+
+  // Monthly Hiring Trend — SVG area/line chart
+  const trend = [
+    { m:"Feb", v:3 }, { m:"Mar", v:6 }, { m:"Apr", v:4 }, { m:"May", v:8 },
+    { m:"Jun", v:5 }, { m:"Jul", v:9 }, { m:"Aug", v:5 },
+  ];
+  const W = 480, H = 170, pad = 8;
+  const tmax = Math.max(...trend.map(t => t.v));
+  const stepX = (W - pad*2) / (trend.length - 1);
+  const pts = trend.map((t,i) => {
+    const x = pad + i*stepX;
+    const y = H - pad - ((t.v / tmax) * (H - pad*2));
+    return [x,y];
+  });
+  const linePath = pts.map((p,i) => (i===0 ? `M${p[0]},${p[1]}` : `L${p[0]},${p[1]}`)).join(" ");
+  const areaPath = `${linePath} L${pts[pts.length-1][0]},${H-pad} L${pts[0][0]},${H-pad} Z`;
+
+  const svg = document.getElementById("hiringTrendSvg");
+  svg.innerHTML = `
+    <defs>
+      <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2563EB" stop-opacity="0.35"/>
+        <stop offset="100%" stop-color="#2563EB" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${areaPath}" fill="url(#trendFill)" stroke="none"/>
+    <path d="${linePath}" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#fff" stroke="#2563EB" stroke-width="2"/>`).join("")}
+  `;
+  document.getElementById("hiringTrendLabels").innerHTML =
+    trend.map(t => `<span>${t.m}</span>`).join("");
+}
+renderCharts();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

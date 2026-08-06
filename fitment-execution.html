@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Fitment Stage Execution</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'fitment-stage',
+  crumbs: [
+    { label: 'Fitment Stage', href: 'fitment-stage.html' },
+    { label: 'Execution' }
+  ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <div class="page-header fade-up">
+      <div>
+        <!-- <a href="fitment-stage.html" class="back-link"><i class="fa-solid fa-arrow-left"></i>Back to Fitment Stage</a> -->
+        <h1>Fitment Stage Execution</h1>
+        <p id="feSub">Review candidate's fitment stage including approval, CTC discussion and rate confirmation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW CARD -->
+  <form class="form-card fade-up" id="feForm">
+    <div class="form-scroll">
+
+      <div class="fe-banner">
+        <i class="fa-regular fa-circle-check"></i>
+        Review all verified variables across previous phases prior to final commitment.
+      </div>
+
+      <!-- PHASE 1 -->
+      <div class="phase-block">
+        <div class="phase-title"><span class="num">1</span>Phase 1 : Documentation Verification</div>
+        <div class="rv-grid">
+          <div class="rv-item">
+            <div class="rv-label">Uploaded Primary CV / Resume</div>
+            <div class="rv-value"><span class="rv-file" id="fResumeFile"><i class="fa-regular fa-file-pdf"></i>Ravi_Kishore_Resume.pdf</span></div>
+          </div>
+          <div class="rv-item rv-full">
+            <div class="rv-label">Verification Remarks</div>
+            <div class="rv-value rv-muted" id="fVerificationRemarks">No remarks entered.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase-block">
+        <div class="phase-title"><span class="num">2</span>Phase 2 : Compensation &amp; Compliance Metrics</div>
+        <div class="rv-grid">
+          <div class="rv-item"><div class="rv-label">Expected CTC (₹)</div><div class="rv-value" id="fExpCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Negotiated CTC (₹)</div><div class="rv-value" id="fNegCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Fixed CTC (₹)</div><div class="rv-value" id="fFixedCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Variable pay (₹)</div><div class="rv-value" id="fVariablePay"></div></div>
+          <div class="rv-item"><div class="rv-label">Joining Bonus (₹)</div><div class="rv-value" id="fJoiningBonus"></div></div>
+          <div class="rv-item"><div class="rv-label">Notice Period</div><div class="rv-value" id="fNotice"></div></div>
+          <div class="rv-item"><div class="rv-label">Tentative Date of Joining</div><div class="rv-value" id="fTentativeDoj"></div></div>
+          <div class="rv-item"><div class="rv-label">Relocation Required</div><div class="rv-value" id="fRelocation"></div></div>
+          <div class="rv-item"><div class="rv-label">Stay Accommodation</div><div class="rv-value" id="fStayAccommodation"></div></div>
+          <div class="rv-item"><div class="rv-label">Travel &amp; Moving Budget Allocation (₹)</div><div class="rv-value" id="fBudget"></div></div>
+          <div class="rv-item rv-full">
+            <div class="rv-label">Compensation Discussion Remarks</div>
+            <div class="rv-value rv-muted" id="fCompRemarks"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase-block">
+        <div class="phase-title"><span class="num">3</span>Phase 3 : Final Rate Approval Compliance</div>
+        <div class="rv-grid">
+          <div class="rv-item"><div class="rv-label">Final CTC (₹)</div><div class="rv-value" id="fFinalCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Negotiated CTC (₹)</div><div class="rv-value" id="fFinalNegCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Fixed CTC (₹)</div><div class="rv-value" id="fFinalFixedCtc"></div></div>
+          <div class="rv-item"><div class="rv-label">Variable pay (₹)</div><div class="rv-value" id="fFinalVariablePay"></div></div>
+          <div class="rv-item"><div class="rv-label">Joining Bonus (₹)</div><div class="rv-value" id="fFinalJoiningBonus"></div></div>
+          <div class="rv-item"><div class="rv-label">Notice Period</div><div class="rv-value" id="fFinalNotice"></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+      <!-- <a href="fitment-stage.html" class="btn-outline-soft" style="margin-right:auto;"><i class="fa-solid fa-arrow-left"></i> Back</a> -->
+      <button type="button" class="btn-outline-soft" id="btnSaveDraft"><i class="fa-regular fa-floppy-disk"></i> Save as Draft</button>
+      <button type="submit" class="btn-primary-grad" id="btnSubmit"><i class="fa-solid fa-paper-plane"></i>Confirm and Submit for Offer Approval</button>
+    </div>
+  </form>
+</div>
+
+<script>
+// ---------- DEMO DATA (fallback for fields not passed via URL) ----------
+const DEMO = {
+  name:'Ravi Kishore', req:'REQ001', position:'Labware LIMS Master Data',
+  expCtc:'13,00,000', negCtc:'11,00,000', fixedCtc:'10,00,000', variablePay:'1,00,000', joiningBonus:'1,00,000',
+  notice:'30 Days', tentativeDoj:'01-07-2026', relocation:'No', stayAccommodation:'No', budget:'1,00,000',
+  compRemarks:'Discussed the overall compensation package including fixed pay and allowances. Candidate is okay with the proposed CTC.',
+  finalCtc:'11,50,000', finalNegCtc:'11,00,000', finalFixedCtc:'10,00,000', finalVariablePay:'1,00,000', finalJoiningBonus:'1,00,000', finalNotice:'30 Days',
+};
+
+const qp = new URLSearchParams(window.location.search);
+const get = (key) => qp.get(key) || DEMO[key] || '—';
+
+const candName = qp.get('name');
+if(candName){
+  document.getElementById('feSub').textContent = `Review ${candName}'s fitment stage including approval, CTC discussion and rate confirmation.`;
+  document.getElementById('fResumeFile').innerHTML = `<i class="fa-regular fa-file-pdf"></i>${candName.replace(/\s+/g,'_')}_Resume.pdf`;
+}
+
+document.getElementById('fExpCtc').textContent = '₹' + get('expCtc');
+document.getElementById('fNegCtc').textContent = '₹' + get('negCtc');
+document.getElementById('fFixedCtc').textContent = '₹' + get('fixedCtc');
+document.getElementById('fVariablePay').textContent = '₹' + get('variablePay');
+document.getElementById('fJoiningBonus').textContent = '₹' + get('joiningBonus');
+document.getElementById('fNotice').textContent = get('notice');
+document.getElementById('fTentativeDoj').textContent = get('tentativeDoj');
+document.getElementById('fRelocation').textContent = get('relocation');
+document.getElementById('fStayAccommodation').textContent = get('stayAccommodation');
+document.getElementById('fBudget').textContent = '₹' + get('budget');
+document.getElementById('fCompRemarks').textContent = get('compRemarks');
+
+document.getElementById('fFinalCtc').textContent = '₹' + get('finalCtc');
+document.getElementById('fFinalNegCtc').textContent = '₹' + get('finalNegCtc');
+document.getElementById('fFinalFixedCtc').textContent = '₹' + get('finalFixedCtc');
+document.getElementById('fFinalVariablePay').textContent = '₹' + get('finalVariablePay');
+document.getElementById('fFinalJoiningBonus').textContent = '₹' + get('finalJoiningBonus');
+document.getElementById('fFinalNotice').textContent = get('finalNotice');
+
+// ---------- ACTIONS ----------
+document.getElementById('btnSaveDraft').addEventListener('click', ()=>{ window.location.href = 'fitment-stage.html'; });
+document.getElementById('feForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  window.location.href = 'offer-approval.html';
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

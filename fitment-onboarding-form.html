@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Fitment Stage</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'fitment-stage',
+  crumbs: [ { label: 'Fitment Stage', href: 'fitment-stage.html' }, { label: 'Onboarding Checklist' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <div class="page-header fade-up">
+      <div>
+        <h1>Fitment Stage</h1>
+        <p>Analyze candidate fit, capture evaluations, and approve qualified candidates for the next hiring stage.</p>
+      </div>
+      <a href="fitment-stage.html" class="btn-outline-soft"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+  </div>
+
+  <!-- ACCORDION FORM CARD — fills remaining height, only the middle scrolls -->
+  <form class="form-card fade-up" id="onboardingForm">
+    <div class="form-scroll">
+      <div class="fitacc" id="fitAcc">
+
+        <!-- 1. PERSONAL INFORMATION -->
+        <div class="fitacc-item" data-step="1">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">1</div>
+            <div class="fitacc-title">Personal Information</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-3">
+              <div class="field"><label>First Name<span class="req">*</span></label><input type="text" placeholder="First Name" required></div>
+              <div class="field"><label>Middle Name</label><input type="text" placeholder="Middle Name"></div>
+              <div class="field"><label>Last Name(Surname)<span class="req">*</span></label><input type="text" placeholder="Last Name" required></div>
+
+              <div class="field"><label>Father's / Husband's Name<span class="req">*</span></label><input type="text" placeholder="Full Name" required></div>
+              <div class="field"><label>Email<span class="req">*</span></label><input type="email" placeholder="name@gmail.com" required></div>
+              <div class="field"><label>Contact<span class="req">*</span></label><input type="tel" placeholder="10-digit mobile" required></div>
+
+              <div class="field"><label>Emergency Contact<span class="req">*</span></label><input type="tel" placeholder="10-digit mobile" required></div>
+              <div class="field"><label>Date of Birth<span class="req">*</span></label><input type="date" required></div>
+              <div class="field">
+                <label>Blood Group<span class="req">*</span></label>
+                <select required><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select>
+              </div>
+
+              <div class="field">
+                <label>Marital Status<span class="req">*</span></label>
+                <select required><option value="">Select</option><option>Single</option><option>Married</option></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. IDENTITY DOCUMENTS -->
+        <div class="fitacc-item" data-step="2">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">2</div>
+            <div class="fitacc-title">Identity Documents</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-2">
+              <div class="field">
+                <label>PAN Number<span class="req">*</span></label>
+                <div class="field-attach">
+                  <input type="text" placeholder="PAN Number" required>
+                  <button type="button" class="attach-mini"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Aadhar Number &amp; Photograph<span class="req">*</span></label>
+                <div class="field-attach">
+                  <input type="text" placeholder="Aadhar Number" required>
+                  <button type="button" class="attach-mini"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+                </div>
+              </div>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>Educational Details</label>
+              <div class="field-attach">
+                <input type="text" placeholder="e.g. B.Tech ECE, JNTU Hyderabad, 2021">
+                <button type="button" class="attach-mini"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. ADDRESS DETAILS -->
+        <div class="fitacc-item" data-step="3">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">3</div>
+            <div class="fitacc-title">Address Details</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="addr-cols">
+              <div>
+                <div class="addr-col-head"><h4>Present Address</h4></div>
+                <div class="field-grid cols-2">
+                  <div class="field"><label>House No</label><input type="text" placeholder="House No"></div>
+                  <div class="field"><label>Street Name</label><input type="text" placeholder="Street Name"></div>
+                  <div class="field"><label>Street No</label><input type="text" placeholder="Street No"></div>
+                  <div class="field"><label>Area</label><input type="text" placeholder="Area"></div>
+                  <div class="field"><label>City</label><input type="text" placeholder="City"></div>
+                  <div class="field"><label>District</label><input type="text" placeholder="District"></div>
+                  <div class="field">
+                    <label>State</label>
+                    <select><option value="">State</option><option>Telangana</option><option>Karnataka</option><option>Maharashtra</option><option>Tamil Nadu</option></select>
+                  </div>
+                  <div class="field"><label>Pin Code</label><input type="text" placeholder="Pin Code"></div>
+                </div>
+              </div>
+              <div>
+                <div class="addr-col-head">
+                  <h4>Permanent Address</h4>
+                  <label class="checkbox-inline"><input type="checkbox" id="sameAddr">Same as present address</label>
+                </div>
+                <div class="field-grid cols-2">
+                  <div class="field"><label>House No</label><input type="text" placeholder="House No"></div>
+                  <div class="field"><label>Street Name</label><input type="text" placeholder="Street Name"></div>
+                  <div class="field"><label>Street No</label><input type="text" placeholder="Street No"></div>
+                  <div class="field"><label>Area</label><input type="text" placeholder="Area"></div>
+                  <div class="field"><label>City</label><input type="text" placeholder="City"></div>
+                  <div class="field"><label>District</label><input type="text" placeholder="District"></div>
+                  <div class="field">
+                    <label>State</label>
+                    <select><option value="">State</option><option>Telangana</option><option>Karnataka</option><option>Maharashtra</option><option>Tamil Nadu</option></select>
+                  </div>
+                  <div class="field"><label>Pin Code</label><input type="text" placeholder="Pin Code"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. EMPLOYMENT DETAILS -->
+        <div class="fitacc-item" data-step="4">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">4</div>
+            <div class="fitacc-title">Employment Details</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-3">
+              <div class="field"><label>Overall Experience</label><input type="text" placeholder="e.g.3.2 yrs"></div>
+              <div class="field"><label>Relevant Experience</label><input type="text" placeholder="e.g.2.5 yrs"></div>
+              <div class="field"><label>Current Company</label><input type="text" placeholder="company name"></div>
+            </div>
+            <div class="field-grid cols-2">
+              <div class="field"><label>Current Salary</label><input type="text" placeholder="Annual CTC (₹)"></div>
+              <div class="field"><label>UAN (PF Number)</label><input type="text" placeholder="12-digit UAN"></div>
+            </div>
+            <div class="field-grid cols-2" style="margin-bottom:0;">
+              <div class="field">
+                <label>Offer Letter</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+              <div class="field">
+                <label>Hike Letter</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+              <div class="field">
+                <label>Relieving Letter</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+              <div class="field">
+                <label>Experience Letter</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. BANKING DETAILS -->
+        <div class="fitacc-item" data-step="5">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">5</div>
+            <div class="fitacc-title">Banking Details</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-2">
+              <div class="field"><label>Bank Account Number</label><input type="text" placeholder="Account Number"></div>
+              <div class="field"><label>Bank Name</label><input type="text" placeholder="e.g. HDFC Bank"></div>
+            </div>
+            <div class="field-grid cols-2" style="margin-bottom:0;">
+              <div class="field"><label>IFSC</label><input type="text" placeholder="e.g. HDFC0001234"></div>
+              <div class="field">
+                <label>Bank Account Details (Attachment)</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. REPORTING & REFERENCES -->
+        <div class="fitacc-item" data-step="6">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">6</div>
+            <div class="fitacc-title">Reporting &amp; References</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-3">
+              <div class="field"><label>Reporting Manager Name</label><input type="text" placeholder="Manager's full name"></div>
+              <div class="field"><label>Reporting Manager Contact</label><input type="tel" placeholder="10-digit mobile"></div>
+              <div class="field"><label>Reporting Manager Email ID</label><input type="email" placeholder="abc@gmail.com"></div>
+
+              <div class="field"><label>Professional Reference 1 Name</label><input type="text" placeholder="Name"></div>
+              <div class="field"><label>Professional Reference 1 Contact</label><input type="tel" placeholder="10-digit mobile"></div>
+              <div class="field"><label>Professional Reference 1 Email ID</label><input type="email" placeholder="abc@gmail.com"></div>
+
+              <div class="field"><label>Professional Reference 2 Name</label><input type="text" placeholder="Name"></div>
+              <div class="field"><label>Professional Reference 2 Contact</label><input type="tel" placeholder="10-digit mobile"></div>
+              <div class="field"><label>Professional Reference 2 Email ID</label><input type="email" placeholder="abc@gmail.com"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. RECENT DOCUMENTS & JOINING DATE -->
+        <div class="fitacc-item" data-step="7">
+          <button type="button" class="fitacc-head">
+            <div class="fitacc-num">7</div>
+            <div class="fitacc-title">Recent Documents &amp; Joining Date</div>
+            <i class="fa-solid fa-chevron-down fitacc-chevron"></i>
+          </button>
+          <div class="fitacc-body">
+            <div class="field-grid cols-3" style="margin-bottom:0;">
+              <div class="field">
+                <label>Recent Pay Slips</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+              <div class="field">
+                <label>6-Month Bank Statement</label>
+                <button type="button" class="attach-mini" style="width:100%; justify-content:center; padding:11px 16px;"><i class="fa-solid fa-paperclip"></i>Attach File</button>
+              </div>
+              <div class="field"><label>Joining Date</label><input type="date"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary-grad">Submit to CTC Discussion<i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+  </form>
+</div>
+
+<script>
+// ---------- ACCORDION (single-open) ----------
+document.querySelectorAll(".fitacc-head").forEach(head => {
+  head.addEventListener("click", () => {
+    const item = head.closest(".fitacc-item");
+    const wasOpen = item.classList.contains("open");
+    document.querySelectorAll(".fitacc-item.open").forEach(i => i.classList.remove("open"));
+    if(!wasOpen) item.classList.add("open");
+  });
+});
+
+// ---------- "SAME AS PRESENT ADDRESS" ----------
+document.getElementById("sameAddr").addEventListener("change", function(){
+  const cols = document.querySelectorAll(".addr-cols > div");
+  const presentInputs = cols[0].querySelectorAll(".field-grid input, .field-grid select");
+  const permanentInputs = cols[1].querySelectorAll(".field-grid input, .field-grid select");
+  if(this.checked){
+    presentInputs.forEach((el, i) => { permanentInputs[i].value = el.value; permanentInputs[i].disabled = true; });
+  }else{
+    permanentInputs.forEach(el => el.disabled = false);
+  }
+});
+
+// ---------- SUBMIT ----------
+document.getElementById("onboardingForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  window.location.href = "fitment-stage.html";
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

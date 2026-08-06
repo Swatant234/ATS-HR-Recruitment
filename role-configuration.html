@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Role Configuration</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'role-configuration',
+  crumbs: [{ label: 'Role Configuration' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+  <!-- PAGE HEADER -->
+  <div class="page-header fade-up d1">
+    <div>
+      <h1>Role Configuration</h1>
+      <p>Assign employees to a role so the system knows where they sit in the approval chain.</p>
+    </div>
+    <button type="button" class="btn-primary-grad" id="openAddBtn"><i class="fa-solid fa-plus"></i>Add Employee</button>
+  </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card fade-up d4">
+    <div class="table-scroll">
+      <table class="ats-table rc-employee-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rcTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info" id="rcPagerInfo">Showing <b>0</b> of <b>0</b> employees</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ADD / EDIT MODAL -->
+<div class="form-modal-backdrop" id="rcModalBackdrop">
+  <form class="form-modal form-modal-md" id="roleConfigForm">
+
+    <div class="config-card-head">
+      <div>
+        <h2 id="rcModalTitle">Configure Employee</h2>
+        <p id="rcModalSub">Set the role for this employee.</p>
+      </div>
+      <button type="button" class="modal-close" id="rcCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="config-card-body">
+
+      <div class="config-field">
+        <label>Employee ID</label>
+        <input type="text" id="employeeId" placeholder="e.g. PT-1005" required>
+      </div>
+
+      <div class="config-field">
+        <label>Employee Name</label>
+        <input type="text" id="employeeName" placeholder="Full name" required>
+      </div>
+
+      <div class="config-field" style="margin-bottom:6px;">
+        <label>Role</label>
+        <select id="employeeRole" required>
+          <option value="">Select role</option>
+          <option>Admin</option>
+          <option>Vertical Head</option>
+          <option>Manager</option>
+          <option>Leads</option>
+          <option>Recruiter Manager</option>
+          <option>Recruiter</option>
+          <option>Business Operations</option>
+        </select>
+        <div class="field-help">Determines where this employee sits in the approval chain.</div>
+      </div>
+
+      <div class="config-field" id="statusField" style="margin-bottom:6px; display:none;">
+        <label>Status</label>
+        <select id="employeeStatus" required>
+          <option>Active</option>
+          <option>Inactive</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="config-card-actions">
+      <button type="button" class="btn-outline-soft" id="rcCancelBtn">Cancel</button>
+      <button type="submit" class="btn-primary-grad" id="saveBtn">Save configuration</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// ---------- DATA ----------
+let employees = [
+  { id:'PT-1001', name:'Karthik Iyer',   role:'Vertical Head',      status:'Active' },
+  { id:'PT-1002', name:'Divya Menon',    role:'Recruiter Manager',  status:'Active' },
+  { id:'PT-1003', name:'Ravi Teja',      role:'Recruiter',          status:'Active' },
+  { id:'PT-1004', name:'Ananya Das',     role:'Manager',            status:'Inactive' },
+  { id:'PT-1005', name:'Farhan Ali',     role:'Business Operations',status:'Active' },
+];
+
+let editIndex = null; // null = add mode, otherwise index into `employees`
+
+// ---------- TABLE RENDER ----------
+function renderTable(){
+  document.getElementById('rcTableBody').innerHTML = employees.map((e, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td><span style="font-weight:600;color:var(--text)">${e.id}</span></td>
+      <td>${e.name}</td>
+      <td>${e.role}</td>
+      <td><span class="req-badge ${e.status === 'Active' ? 'badge-active' : 'badge-inactive'}">${e.status}</span></td>
+      <td><button type="button" class="action-edit" title="Edit" onclick="openModal('edit', ${i})"><i class="fa-regular fa-pen-to-square"></i></button></td>
+    </tr>
+  `).join('');
+
+  document.getElementById('rcPagerInfo').innerHTML = `Showing <b>${employees.length}</b> of <b>${employees.length}</b> employees`;
+}
+
+// ---------- MODAL ----------
+const backdrop = document.getElementById('rcModalBackdrop');
+const form = document.getElementById('roleConfigForm');
+const employeeId = document.getElementById('employeeId');
+const employeeName = document.getElementById('employeeName');
+const employeeRole = document.getElementById('employeeRole');
+const employeeStatus = document.getElementById('employeeStatus');
+const statusField = document.getElementById('statusField');
+
+function openModal(mode, idx){
+  editIndex = (mode === 'edit') ? idx : null;
+  if(mode === 'edit'){
+    const e = employees[idx];
+    document.getElementById('rcModalTitle').textContent = 'Edit Employee';
+    document.getElementById('rcModalSub').textContent = 'Update the role for this employee.';
+    employeeId.value = e.id;
+    employeeName.value = e.name;
+    employeeRole.value = e.role;
+    employeeStatus.value = e.status;
+    statusField.style.display = '';
+  }else{
+    document.getElementById('rcModalTitle').textContent = 'Configure Employee';
+    document.getElementById('rcModalSub').textContent = 'Set the role for this employee.';
+    form.reset();
+    employeeStatus.value = 'Active';
+    statusField.style.display = 'none';
+  }
+  backdrop.classList.add('show');
+}
+function closeModal(){
+  backdrop.classList.remove('show');
+  editIndex = null;
+  form.reset();
+}
+window.openModal = openModal;
+
+document.getElementById('openAddBtn').addEventListener('click', () => openModal('add'));
+document.getElementById('rcCloseBtn').addEventListener('click', closeModal);
+document.getElementById('rcCancelBtn').addEventListener('click', closeModal);
+backdrop.addEventListener('click', (e) => { if(e.target === backdrop) closeModal(); });
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if(!employeeId.value.trim() || !employeeName.value.trim() || !employeeRole.value){
+    form.reportValidity();
+    return;
+  }
+  const record = {
+    id: employeeId.value.trim(),
+    name: employeeName.value.trim(),
+    role: employeeRole.value,
+    // new employees are always added as Active; status can only be changed via Edit
+    status: editIndex !== null ? employeeStatus.value : 'Active',
+  };
+  if(editIndex !== null){
+    employees[editIndex] = record;
+  }else{
+    employees.push(record);
+  }
+  renderTable();
+  closeModal();
+});
+
+renderTable();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

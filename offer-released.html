@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Offer Released</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'offer-released',
+  crumbs: [ { label: 'Offer Released' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Offer Released</h1>
+        <p>Release approved offer letters, track offer status, and manage candidate responses.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFERS RELEASED TABLE -->
+  <div class="req-toolbar-card table-card fade-up d1">
+    <div class="req-toolbar">
+      <span class="req-toolbar-title">Offers Released</span>
+      <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" id="orSearch" placeholder="Search"></div>
+    </div>
+
+    <div class="table-scroll">
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th>S.No</th><th>Requisition ID</th><th>TA Partner</th><th>Vertical</th>
+            <th>Employment Type</th><th>Experience Type</th><th>Employee Name (As Per Aadhar)</th>
+            <th>Client / Customer</th><th>Position / Skill</th><th>Designation</th><th>Email ID</th>
+            <th>Offer Released Date</th><th>DOJ</th><th>Revised DOJ</th><th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b id="orShowing">1</b> Out of <b>50</b> Items</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- OFFERS RELEASED DATA ----------
+const OFFERS = [
+  {req:'REQ-2026-101', ta:'Priya Sharma', vertical:'Product Development', empType:'Full Time', expType:'Experienced', name:'Rahul Kumar Reddy', client:'Viatris', position:'Senior Front-End Developer (Angular)', designation:'Software Engineer II', email:'rahul.reddy@gmail.com', releasedDate:'07-Jul-2026', doj:'03-Aug-2026', revisedDoj:'10-Aug-2026', status:'Released', badge:'badge-active'},
+  {req:'REQ-2026-102', ta:'Priya Sharma', vertical:'Product Development', empType:'Full Time', expType:'Experienced', name:'Shukrutha B L', client:'Viatris', position:'Senior UI/UX Designer', designation:'Software Engineer II', email:'shukrutha.bl@gmail.com', releasedDate:'01-Jul-2026', doj:'11-May-2026', revisedDoj:'12-Jun-2026', status:'Accepted', badge:'badge-review'},
+  {req:'REQ-2026-097', ta:'Anil Kumar', vertical:'SAP', empType:'Full Time', expType:'Experienced', name:'Suresh Pillai', client:'Viatris', position:'SAP PPQM Consultant', designation:'Consultant', email:'suresh.pillai@gmail.com', releasedDate:'28-Jun-2026', doj:'05-May-2026', revisedDoj:'—', status:'Pending', badge:'badge-pending-mgr'},
+  {req:'REQ-2026-108', ta:'Meena Iyer', vertical:'LIMS', empType:'Contract', expType:'Experienced', name:'Devika Nair', client:'Biocon', position:'LIMS QA Engineer', designation:'QA Engineer', email:'devika.nair@gmail.com', releasedDate:'25-Jun-2026', doj:'—', revisedDoj:'—', status:'Declined', badge:'badge-hold'},
+];
+
+function renderRows(){
+  const search = document.getElementById('orSearch').value.trim().toLowerCase();
+  const rows = OFFERS.filter(r =>
+    !search || r.name.toLowerCase().includes(search) || r.req.toLowerCase().includes(search) || r.position.toLowerCase().includes(search)
+  );
+
+  const body = document.getElementById('orTableBody');
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="16"><div class="oa-empty">No offers match your search.</div></td></tr>`;
+  }else{
+    body.innerHTML = rows.map((r,i) => `
+      <tr>
+        <td>${i+1}</td>
+        <td><a href="#" style="color:var(--accent);font-weight:600">#${r.req}</a></td>
+        <td>${r.ta}</td>
+        <td>${r.vertical}</td>
+        <td>${r.empType}</td>
+        <td>${r.expType}</td>
+        <td>${r.name}</td>
+        <td>${r.client}</td>
+        <td>${r.position}</td>
+        <td>${r.designation}</td>
+        <td>${r.email}</td>
+        <td>${r.releasedDate}</td>
+        <td>${r.doj}</td>
+        <td>${r.revisedDoj}</td>
+        <td><span class="req-badge ${r.badge}">${r.status}</span></td>
+        <td>
+          <div style="display:flex; gap:6px;">
+            <a href="offer-released-detail.html?req=${encodeURIComponent(r.req)}&ta=${encodeURIComponent(r.ta)}&vertical=${encodeURIComponent(r.vertical)}&client=${encodeURIComponent(r.client)}&position=${encodeURIComponent(r.position)}&designation=${encodeURIComponent(r.designation)}&empType=${encodeURIComponent(r.empType)}&expType=${encodeURIComponent(r.expType)}&name=${encodeURIComponent(r.name)}&email=${encodeURIComponent(r.email)}&releasedDate=${encodeURIComponent(r.releasedDate)}&doj=${encodeURIComponent(r.doj)}&revisedDoj=${encodeURIComponent(r.revisedDoj)}" class="action-edit" title="Edit"><i class="fa-regular fa-pen-to-square"></i></a>
+            <a href="#" class="action-edit" title="View"><i class="fa-regular fa-eye"></i></a>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+  document.getElementById('orShowing').textContent = rows.length;
+}
+
+document.getElementById('orSearch').addEventListener('input', renderRows);
+renderRows();
+</script>
+<script src="app.js"></script>
+</body>
+</html>

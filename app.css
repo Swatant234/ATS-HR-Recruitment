@@ -1,0 +1,819 @@
+/* ==========================================================================
+   PRO-ATS — APP SHELL STYLESHEET
+   Sidebar, topbar, and the header-triggered popovers/modals injected by
+   app.js on every page (logout confirmation, profile popover, language
+   popover). Load this after global.css.
+   ========================================================================== */
+
+/* ============ SIDEBAR (shared component, injected by app.js) ============ */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--card);
+  border-radius: 0;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  display: flex;
+  flex-direction: column;
+  padding: 14px 10px;
+  z-index: 1000;
+  height: 100vh;
+  transition:
+    width 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.28s ease;
+}
+.sidebar.hidden {
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+.main.sidebar-hidden {
+  margin-left: 0;
+}
+
+/* ---- collapsed ("half") sidebar — icon-only rail ---- */
+.sidebar.collapsed {
+  width: var(--sidebar-w-collapsed);
+  padding: 16px 10px;
+  align-items: center;
+}
+/* hidden always wins over collapsed, regardless of source order (3 classes beats 2) */
+.sidebar.hidden.collapsed {
+  width: 0;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+}
+.main.sidebar-collapsed.sidebar-hidden {
+  margin-left: 0;
+}
+.sidebar.collapsed .sidebar-brand {
+  justify-content: center;
+  padding: 4px 0 16px;
+}
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .nav-section-label,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .logout-btn span {
+  display: none;
+}
+.sidebar.collapsed .nav-scroll {
+  width: 100%;
+  overflow: visible;
+}
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 10px 0;
+  gap: 0;
+  overflow: visible;
+}
+.sidebar.collapsed .nav-item:hover {
+  transform: none;
+}
+.sidebar.collapsed .nav-item i {
+  width: auto;
+  flex: none;
+  font-size: 12px;
+}
+.sidebar.collapsed .logout-btn {
+  justify-content: center;
+  padding: 10px 0;
+}
+.sidebar.collapsed .sidebar-footer {
+  width: 100%;
+}
+.sidebar.collapsed .logout-btn i {
+  width: auto;
+  flex: none;
+  font-size: 12px;
+}
+.main.sidebar-collapsed {
+  margin-left: var(--sidebar-w-collapsed);
+}
+
+/* ---- sidebar toggle button (chevron, sits on the sidebar edge) ---- */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 28px;
+  right: -13px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  z-index: 1001;
+  padding: 0;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+.sidebar-toggle-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+.sidebar-toggle-btn i {
+  font-size: 10px;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar.collapsed .sidebar-toggle-btn i {
+  transform: rotate(180deg);
+}
+
+/* ---- tooltips for sidebar items (shown when collapsed) ---- */
+.sidebar.collapsed [data-tooltip] {
+  position: relative;
+}
+.sidebar.collapsed [data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(-4px);
+  background: var(--text);
+  color: var(--card);
+  font-size: 9.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 7px;
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+  z-index: 1002;
+}
+.sidebar.collapsed [data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+@media (max-width: 640px) {
+  .sidebar-toggle-btn {
+    display: none;
+  }
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 4px 8px 16px 8px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.brand-mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  flex: 0 0 26px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 8.5px;
+  box-shadow: 0 4px 10px rgba(26, 95, 168, 0.35);
+}
+.brand-text {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.brand-text .name {
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: -0.2px;
+  line-height: 1.1;
+}
+.brand-text .name span {
+  color: var(--accent);
+}
+.brand-text .sub {
+  font-size: 8.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.nav-section-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 8px 8px 3px;
+  opacity: 0.75;
+}
+.nav-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex: 1;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+.nav-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.nav-scroll::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 600;
+  margin-bottom: 1px;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+.nav-item i {
+  width: 13px;
+  text-align: center;
+  font-size: 9px;
+  flex: 0 0 13px;
+}
+.nav-item:hover {
+  background: var(--hover);
+  color: var(--primary);
+  transform: translateX(2px);
+}
+.nav-item.active {
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(37, 99, 235, 0.28);
+}
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 6px;
+}
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--error);
+  font-weight: 600;
+  font-size: 9px;
+  transition: background 0.18s ease;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  font-family: var(--app-font);
+}
+.logout-btn:hover {
+  background: #fef2f2;
+  color: var(--error);
+}
+
+/* ============ MAIN ============ */
+.main {
+  margin-left: var(--sidebar-w);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============ HEADER WRAP (topbar + breadcrumb, collapsible) ============ */
+.header-wrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+.app-header {
+  overflow: hidden;
+  max-height: 140px;
+  opacity: 1;
+  transition:
+    max-height 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s ease;
+}
+.app-header.hidden {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* ---- header toggle button (small square, hangs on the header's bottom edge) ---- */
+.header-toggle-btn {
+  position: absolute;
+  left: 50%;
+  bottom: -13px;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  cursor: pointer;
+  z-index: 950;
+  padding: 0;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.header-toggle-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+.header-toggle-btn i {
+  font-size: 9px;
+}
+
+/* ============ TOPBAR (shared component, injected by app.js) ============ */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 18px;
+  box-shadow: var(--shadow-sm);
+  flex: 0 0 auto;
+  z-index: 900;
+}
+body.dark .topbar {
+  background: rgba(17, 26, 43, 0.7);
+}
+.breadcrumb-bar {
+  flex: 0 0 auto;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 5px 18px;
+  overflow-x: auto;
+  white-space: nowrap;
+  z-index: 890;
+}
+.breadcrumb-bar::-webkit-scrollbar { height: 0; }
+.breadcrumb-mini {
+  font-size: 8.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: max-content;
+}
+.breadcrumb-mini a {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.breadcrumb-mini a:hover {
+  color: var(--accent);
+}
+.breadcrumb-mini .current {
+  color: var(--text);
+  font-weight: 700;
+}
+.icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 9.5px;
+  transition: all 0.18s ease;
+  position: relative;
+}
+.icon-btn:hover {
+  background: var(--hover);
+  color: var(--accent);
+  border-color: var(--border);
+  transform: translateY(-1px);
+}
+.icon-btn.active-icon {
+  background: var(--hover);
+  color: var(--accent);
+  border-color: var(--border);
+}
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.icon-btn .dot {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--error);
+  border: 2px solid var(--card);
+}
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-left: 10px;
+  margin-left: 4px;
+  border-left: 1px solid var(--border);
+  cursor: pointer;
+}
+.user-chip .avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 8.5px;
+  box-shadow: var(--shadow-sm);
+}
+.user-chip .who {
+  line-height: 1.15;
+}
+.user-chip .who .name {
+  font-size: 9.5px;
+  font-weight: 700;
+}
+.user-chip .who .role {
+  font-size: 8.5px;
+  color: var(--text-secondary);
+}
+
+/* ============ LOGOUT CONFIRMATION MODAL (shared component) ============ */
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.modal-backdrop-custom.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.confirm-modal {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  width: 340px;
+  max-width: 90vw;
+  padding: 26px 24px 20px;
+  text-align: center;
+  transform: translateY(14px) scale(0.97);
+  transition: transform 0.22s ease;
+}
+.modal-backdrop-custom.show .confirm-modal {
+  transform: translateY(0) scale(1);
+}
+.confirm-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--error);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15.5px;
+}
+.confirm-modal h3 {
+  font-size: 12.5px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  color: var(--text);
+}
+.confirm-modal p {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.confirm-actions .btn-outline-soft,
+.confirm-actions .btn-danger-solid {
+  flex: 1;
+  justify-content: center;
+}
+.btn-danger-solid {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 10.5px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  box-shadow: 0 6px 14px rgba(239, 68, 68, 0.28);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+.btn-danger-solid:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    transform: translateX(-120%);
+    transition:
+      transform 0.3s ease,
+      width 0.28s ease,
+      padding 0.28s ease;
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  .sidebar-overlay {
+    display: block;
+  }
+  .sidebar-overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .main {
+    margin-left: 0;
+  }
+  .topbar {
+    padding: 6px 12px;
+    gap: 6px;
+  }
+  .breadcrumb-bar {
+    padding: 4px 12px;
+  }
+  .user-chip .who {
+    display: none;
+  }
+}
+
+/* ============================================================
+   COMPONENT: header profile popover (user-chip)
+   ============================================================ */
+.user-popover {
+  position: fixed;
+  z-index: 2500;
+  width: 300px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow:
+    0 20px 45px -10px rgba(15, 23, 42, 0.22),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+  padding: 0;
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  pointer-events: none;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+.user-popover.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.user-popover::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: rotate(45deg);
+  border-radius: 3px 0 0 0;
+}
+.user-popover.flip-up::before {
+  top: auto;
+  bottom: -7px;
+  right: 22px;
+  border-left: none;
+  border-top: none;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 3px 0;
+}
+.up-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 20px 18px 16px;
+  background: linear-gradient(
+    180deg,
+    rgba(37, 99, 235, 0.07),
+    rgba(37, 99, 235, 0)
+  );
+  border-radius: 16px 16px 0 0;
+}
+.up-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  flex: none;
+  background: linear-gradient(135deg, var(--primary), var(--gold));
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  box-shadow: 0 6px 14px -4px rgba(37, 99, 235, 0.45);
+  border: 2px solid var(--card);
+}
+.up-id {
+  min-width: 0;
+}
+.up-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 5px;
+}
+.up-role-chip {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--hover);
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.02em;
+}
+.up-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.up-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  margin: 0 8px;
+  border-radius: 10px;
+  transition: background 0.15s ease;
+}
+.up-row:hover {
+  background: var(--hover);
+}
+.up-row-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  flex: none;
+  background: var(--hover);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.up-row-icon-blue {
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563eb;
+}
+.up-row-icon-violet {
+  background: rgba(124, 58, 237, 0.12);
+  color: #7c3aed;
+}
+.up-row-icon-amber {
+  background: rgba(217, 119, 6, 0.12);
+  color: #d97706;
+}
+.up-row-icon-teal {
+  background: rgba(13, 148, 136, 0.12);
+  color: #0d9488;
+}
+.up-action {
+  width: calc(100% - 16px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 6px 8px 0;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  cursor: pointer;
+  font-family: var(--app-font);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+.up-action:hover {
+  background: var(--hover);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.up-row-text {
+  min-width: 0;
+  padding-top: 1px;
+}
+.up-row-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+.up-row-value {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-word;
+}
+.up-logout {
+  width: calc(100% - 16px);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 6px 8px 8px;
+  padding: 11px 8px;
+  border-radius: 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--app-font);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--error);
+  transition: background 0.15s ease;
+}
+.up-logout:hover {
+  background: #fef2f2;
+}

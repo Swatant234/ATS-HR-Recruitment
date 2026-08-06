@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Profile Database</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<!-- Inter -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'profile-database',
+  crumbs: [ { label: 'Profile Database' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="content-pad">
+  <!-- PAGE HEADER -->
+  <div class="page-header fade-up d1">
+    <div>
+      <h1>Profile Database</h1>
+      <p>Access and manage your candidate database efficiently — search, filter and track every profile in one place.</p>
+    </div>
+    <a href="create-profile.html" class="btn-primary-grad" id="createBtn"><i class="fa-solid fa-plus"></i>Create New Profile</a>
+  </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card fade-up d4">
+    <div class="table-scroll">
+      <table class="ats-table">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>Candidate</th>
+            <th>Requisition ID</th>
+            <th>Position</th>
+            <th>Sourcing Channel</th>
+            <th>Experience</th>
+            <th>Financial Metrics</th>
+            <th>Current Organization</th>
+            <th>Notice Period</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="pager-bar">
+      <div class="pager-info">Showing <b>1–5</b> of <b>50</b> candidates</div>
+      <div class="pager">
+        <button><i class="fa-solid fa-angles-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+        <button><i class="fa-solid fa-angles-right"></i></button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---------- DATA ----------
+const candidates = [
+  {name:"Rajesh Kumar", role:"SAP FICO Consultant", email:"rajesh.kumar@email.com", req:"#REQ-2026-001", position:"SAP FICO", channel:"LinkedIn",
+   totalExp:2, relExp:2, curSal:"₹6,50,000", targetSal:"₹9,00,000", org:"Accenture", loc:"Hyderabad",
+   notice:"30 Days", negotiable:"Negotiable: 15 Days", status:"L1 Scheduled", statusClass:"status-blue", statusDate:"29/06/2026, 16:00",
+   panel1:"Rahul Sharma", panel2:"—", created:"25/06/2026", createdTime:"12:02:07 PM", color:"#2563EB"},
+  {name:"Sai Kumar", role:"SAP FICO Consultant", email:"sai.kumar@email.com", req:"#REQ-2026-002", position:"SAP FICO", channel:"LinkedIn",
+   totalExp:2, relExp:2, curSal:"₹6,50,000", targetSal:"₹9,00,000", org:"Accenture", loc:"Hyderabad",
+   notice:"30 Days", negotiable:"Negotiable: 15 Days", status:"Under Review", statusClass:"status-orange", statusDate:"—",
+   panel1:"Rahul Sharma", panel2:"—", created:"25/06/2026", createdTime:"12:02:07 PM", color:"#F59E0B"},
+  {name:"Priya Nair", role:"Frontend Developer", email:"priya.nair@email.com", req:"#REQ-2026-003", position:"React JS", channel:"Referral",
+   totalExp:4, relExp:3, curSal:"₹11,00,000", targetSal:"₹15,00,000", org:"Infosys", loc:"Bengaluru",
+   notice:"60 Days", negotiable:"Negotiable: 30 Days", status:"Interviewed", statusClass:"status-purple", statusDate:"18/06/2026, 11:30",
+   panel1:"Anita Verma", panel2:"Kiran Rao", created:"20/06/2026", createdTime:"10:41:52 AM", color:"#7C3AED"},
+  {name:"Mohammed Faizan", role:"Data Analyst", email:"faizan.m@email.com", req:"#REQ-2026-004", position:"Data Analytics", channel:"Naukri",
+   totalExp:3, relExp:3, curSal:"₹8,20,000", targetSal:"₹11,50,000", org:"TCS", loc:"Pune",
+   notice:"15 Days", negotiable:"Negotiable: 7 Days", status:"Offer Released", statusClass:"status-green", statusDate:"12/06/2026, 09:00",
+   panel1:"Rahul Sharma", panel2:"Divya Menon", created:"18/06/2026", createdTime:"03:22:10 PM", color:"#16A34A"},
+  {name:"Ananya Reddy", role:"HR Business Partner", email:"ananya.reddy@email.com", req:"#REQ-2026-005", position:"HRBP", channel:"LinkedIn",
+   totalExp:6, relExp:5, curSal:"₹14,00,000", targetSal:"₹18,00,000", org:"Wipro", loc:"Hyderabad",
+   notice:"90 Days", negotiable:"Negotiable: 45 Days", status:"Rejected", statusClass:"status-red", statusDate:"05/06/2026, 14:15",
+   panel1:"—", panel2:"—", created:"15/06/2026", createdTime:"09:05:33 AM", color:"#EF4444"},
+];
+
+const initials = n => n.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase();
+const orgInitial = o => o.slice(0,2).toUpperCase();
+
+function renderRows(){
+  const body = document.getElementById("tableBody");
+  body.innerHTML = candidates.map((c,i)=>`
+    <tr>
+      <td data-label="S.No">${i+1}</td>
+      <td data-label="Candidate">
+        <div class="candidate-cell">
+          <div class="candidate-meta">
+            <div class="cname">${c.name}</div>
+            <div class="crole">${c.role}</div>
+            <div class="cmail">${c.email}</div>
+          </div>
+        </div>
+      </td>
+      <td data-label="Requisition ID"><a href="#" class="req-link">${c.req}</a></td>
+      <td data-label="Position">${c.position}</td>
+      <td data-label="Sourcing Channel"><span class="text-secondary"><i class="fa-brands fa-linkedin" style="color:${c.channel==='LinkedIn'?'#2563EB':'#94A3B8'};margin-right:5px"></i>${c.channel}</span></td>
+      <td data-label="Experience">
+        <div class="exp-wrap">
+          <div class="exp-total">Total: ${c.totalExp} Yrs</div>
+          <div class="exp-rel">Relevant: ${c.relExp} Yrs</div>
+        </div>
+      </td>
+      <td data-label="Financial Metrics">
+        <div class="sal-primary">${c.curSal}</div>
+        <div class="sal-secondary"><i class="fa-solid fa-arrow-trend-up" style="color:var(--success)"></i>Target: ${c.targetSal}</div>
+      </td>
+      <td data-label="Current Organization">
+        <div class="org-cell">
+          <div class="org-logo">${orgInitial(c.org)}</div>
+          <div>
+            <div class="org-name">${c.org}</div>
+            <div class="org-loc"><i class="fa-solid fa-location-dot"></i>${c.loc}</div>
+          </div>
+        </div>
+      </td>
+      <td data-label="Notice Period">
+        <div class="notice-badge">${c.notice}</div>
+        <div class="notice-sub">${c.negotiable}</div>
+      </td>
+      <td data-label="Status">
+        <span class="status-badge ${c.statusClass}"><i class="fa-solid fa-circle"></i>${c.status}</span>
+        <div class="status-date">${c.statusDate}</div>
+      </td>
+      <td data-label="Created On">
+        <div class="created-cell">
+          <div class="d">${c.created}</div>
+          <div class="t">${c.createdTime}</div>
+        </div>
+      </td>
+      <td data-label="Actions">
+        <div class="action-menu">
+          <div class="action-dots" onclick="toggleMenu(this)"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+          <div class="action-dropdown">
+            <a href="#"><i class="fa-regular fa-eye"></i>View</a>
+            <a href="edit-profile.html"><i class="fa-regular fa-pen-to-square"></i>Edit</a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function toggleMenu(el){
+  const menu = el.closest(".action-menu");
+  const wasOpen = menu.classList.contains("open");
+  document.querySelectorAll(".action-menu.open").forEach(m=>m.classList.remove("open"));
+  if(!wasOpen) menu.classList.add("open");
+}
+document.addEventListener("click", e=>{
+  if(!e.target.closest(".action-menu")) document.querySelectorAll(".action-menu.open").forEach(m=>m.classList.remove("open"));
+});
+
+// initial render with a brief skeleton pass
+document.getElementById("tableBody").innerHTML = Array.from({length:5}).map(()=>`
+  <tr>${Array.from({length:12}).map(()=>'<td><div class="skeleton" style="height:16px;width:80%"></div></td>').join("")}</tr>
+`).join("");
+setTimeout(renderRows, 420);
+
+// ---------- BUTTON RIPPLE ----------
+document.getElementById("createBtn").addEventListener("click", function(e){
+  const rect = this.getBoundingClientRect();
+  const ripple = document.createElement("span");
+  ripple.className = "ripple";
+  const size = Math.max(rect.width, rect.height);
+  ripple.style.width = ripple.style.height = size+"px";
+  ripple.style.left = (e.clientX-rect.left-size/2)+"px";
+  ripple.style.top = (e.clientY-rect.top-size/2)+"px";
+  this.appendChild(ripple);
+  setTimeout(()=>ripple.remove(), 600);
+});
+</script>
+<script src="app.js"></script>
+</body>
+</html>

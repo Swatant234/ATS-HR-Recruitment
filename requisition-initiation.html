@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO-ATS · Requisition Initiation</title>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="global.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<script src="loader.js"></script>
+<script>
+window.PAGE = {
+  active: 'requisition-initiation',
+  crumbs: [ { label: 'Requisition Initiation' } ]
+};
+</script>
+
+<div id="sidebarMount"></div>
+
+<!-- ============ MAIN ============ -->
+<div class="main" id="main">
+
+  <div id="topbarMount"></div>
+
+  <div class="page-scroll">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header fade-up">
+      <div>
+        <h1>Requisition Initiation</h1>
+        <p>Manage hire distribution structures, submit workflows, analyze organizational priorities, and configure system options.</p>
+      </div>
+      <a href="initiate-requisition.html" class="btn-primary-grad"><i class="fa-solid fa-bolt"></i>Initiate New Requisition</a>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="req-stat-grid fade-up d1">
+      <div class="req-stat-card">
+        <div><div class="label">Total Requisitions</div><div class="num" style="color:var(--accent)">9</div></div>
+        <div class="stat-icon-box" style="--icon-color:#2563EB"><i class="fa-solid fa-file-circle-plus"></i></div>
+      </div>
+      <div class="req-stat-card">
+        <div><div class="label">Total Positions</div><div class="num" style="color:#D97706">15</div></div>
+        <div class="stat-icon-box" style="--icon-color:#F59E0B"><i class="fa-solid fa-users"></i></div>
+      </div>
+      <div class="req-stat-card">
+        <div><div class="label">Critical Priority</div><div class="num" style="color:var(--error)">1</div></div>
+        <div class="stat-icon-box" style="--icon-color:#EF4444"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      </div>
+      <div class="req-stat-card">
+        <div><div class="label">Pending Approval</div><div class="num" style="color:#16A34A">3</div></div>
+        <div class="stat-icon-box" style="--icon-color:#22C55E"><i class="fa-regular fa-clock"></i></div>
+      </div>
+    </div>
+
+    <!-- CHARTS -->
+    <div class="chart-grid fade-up d2">
+      <div class="chart-card">
+        <div class="chart-card-head"><div class="chart-title">Priority Distribution</div></div>
+        <div class="donut-row">
+          <div class="donut-wrap"><div class="css-donut" id="priorityDonut"></div></div>
+          <div class="donut-legend">
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#EF4444"></span>Critical</div><span class="dl-pct">1 (11.11%)</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#F59E0B"></span>High</div><span class="dl-pct">5 (55.56%)</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#2563EB"></span>Medium</div><span class="dl-pct">2 (22.22%)</span></div>
+            <div class="dl-row"><div class="dl-left"><span class="dot" style="background:#6B7280"></span>Low</div><span class="dl-pct">1 (11.11%)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-head">
+          <div class="chart-title">Positions by Vertical</div>
+          <div class="chart-legend-mini"><span class="dot"></span>Positions Required</div>
+        </div>
+        <div class="bar-wrap" id="verticalBar"></div>
+      </div>
+    </div>
+
+    <!-- REQUISITIONS TABLE -->
+    <div class="req-toolbar-card fade-up d3">
+      <div class="req-toolbar">
+        <span class="req-toolbar-title">Requisitions</span>
+        <div class="gsearch"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="Search"></div>
+        <select class="filter-select"><option>Overall</option><option>SAP</option><option>.NET</option><option>Python</option></select>
+        <select class="filter-select"><option>Date</option><option>Last 7 Days</option><option>Last 30 Days</option></select>
+        <select class="filter-select"><option>Status</option><option>Active</option><option>Hold</option><option>In Review</option><option>Closed</option></select>
+        <button class="clear-chip"><i class="fa-solid fa-xmark"></i>Clear All</button>
+      </div>
+
+      <div class="table-scroll" style="overflow-x:auto;">
+        <table class="req-table">
+          <thead>
+            <tr>
+              <th>S.No</th><th>SOW No</th><th>Requisition ID</th><th>Vertical</th><th>Client</th><th>Project</th>
+              <th>Skill</th><th>Positions</th><th>Priority</th><th>Hiring Type</th>
+              <th>Start Date</th><th>Created On</th><th>Status</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="reqTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="pager-bar">
+        <div class="pager-info">Showing <b>5</b> Out of <b>50</b> Items</div>
+        <div class="pager">
+          <button><i class="fa-solid fa-angles-left"></i></button>
+          <button class="active">1</button>
+          <button>2</button>
+          <button>3</button>
+          <button>4</button>
+          <button>5</button>
+          <button>6</button>
+          <button><i class="fa-solid fa-angles-right"></i></button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- VIEW REQUISITION MODAL (XL) -->
+<div class="form-modal-backdrop" id="viewReqBackdrop">
+  <div class="form-modal modal-xl">
+
+    <div class="config-card-head">
+      <div>
+        <h2>Requisition Details</h2>
+        <p id="viewReqSub">Full breakdown of this requisition.</p>
+      </div>
+      <button type="button" class="modal-close" id="viewReqCloseBtn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="config-card-body">
+      <div class="field-grid cols-3" id="viewReqGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div class="config-card-actions">
+      <button type="button" class="btn-outline-soft" id="viewReqCloseBtn2">Close</button>
+      <a href="#" class="btn-primary-grad" id="viewReqEditBtn"><i class="fa-regular fa-pen-to-square"></i>Edit Requisition</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ---------- REQUISITIONS TABLE DATA ----------
+const requisitions = [
+  {sowNo:"PT-SOW-90012-FY25", id:"TEMP-25678", vertical:"SAP", client:"Pharma Client A", project:"ERP Implantation", skill:"SAP FICO", positions:2, priority:"High", priorityBadge:"priority-high", hiring:"Full Time", start:"01/07/2026", created:"25/06/2026", createdTime:"12:02:07 PM", status:"Active", badge:"badge-active"},
+  {sowNo:"PT-SOW-90012-FY25", id:"TEMP-25678", vertical:"SAP", client:"Pharma Client A", project:"ERP Implantation", skill:"SAP FICO", positions:2, priority:"Low", priorityBadge:"priority-low", hiring:"Full Time", start:"01/07/2026", created:"25/06/2026", createdTime:"12:02:07 PM", status:"Hold", badge:"badge-hold"},
+  {sowNo:"PT-SOW-90012-FY25", id:"REQ-25678", vertical:"SAP", client:"Pharma Client A", project:"ERP Implantation", skill:"SAP FICO", positions:2, priority:"High", priorityBadge:"priority-high", hiring:"Full Time", start:"01/07/2026", created:"25/06/2026", createdTime:"12:02:07 PM", status:"In Review", badge:"badge-review"},
+  {sowNo:"PT-SOW-90012-FY25", id:"REQ-25678", vertical:"SAP", client:"Pharma Client A", project:"ERP Implantation", skill:"SAP FICO", positions:2, priority:"High", priorityBadge:"priority-high", hiring:"Full Time", start:"01/07/2026", created:"25/06/2026", createdTime:"12:02:07 PM", status:"Closed", badge:"badge-closed"},
+];
+
+document.getElementById("reqTableBody").innerHTML = requisitions.map((r,i)=>`
+  <tr>
+    <td>${i+1}</td>
+    <td>${r.sowNo}</td>
+    <td><a href="#" onclick="openViewReq(${i}); return false;" style="color:var(--accent);font-weight:600">${r.id}</a></td>
+    <td style="font-weight:600">${r.vertical}</td>
+    <td style="font-weight:600">${r.client}</td>
+    <td>${r.project}</td>
+    <td>${r.skill}</td>
+    <td>${r.positions}</td>
+    <td><span class="priority-badge ${r.priorityBadge}">${r.priority}</span></td>
+    <td>${r.hiring}</td>
+    <td>${r.start}</td>
+    <td>${r.created}<br><span style="color:var(--text-secondary);font-size:10.5px">${r.createdTime}</span></td>
+    <td><span class="req-badge ${r.badge}">${r.status}</span></td>
+    <td><a href="initiate-requisition.html?edit=1&id=${encodeURIComponent(r.id)}&vertical=${encodeURIComponent(r.vertical)}&client=${encodeURIComponent(r.client)}&project=${encodeURIComponent(r.project)}&skill=${encodeURIComponent(r.skill)}&positions=${encodeURIComponent(r.positions)}&priority=${encodeURIComponent(r.priority)}&hiring=${encodeURIComponent(r.hiring)}&start=${encodeURIComponent(r.start)}" class="action-edit"><i class="fa-regular fa-pen-to-square"></i></a></td>
+  </tr>
+`).join("");
+
+// ---------- CHARTS (pure CSS — no external chart library required) ----------
+function renderCharts(){
+  // Priority Distribution donut
+  const priority = [
+    { pct: 11.11, color: "#EF4444" }, // Critical
+    { pct: 55.56, color: "#F59E0B" }, // High
+    { pct: 22.22, color: "#2563EB" }, // Medium
+    { pct: 11.11, color: "#6B7280" }, // Low
+  ];
+  let acc = 0;
+  const stops = priority.map(s => {
+    const from = acc; acc += s.pct;
+    return `${s.color} ${from}% ${acc}%`;
+  }).join(", ");
+  document.getElementById("priorityDonut").style.background = `conic-gradient(${stops})`;
+
+  // Positions by Vertical bar chart
+  const verticalData = [
+    { label: "CSV", value: 17 },
+    { label: ".NET", value: 22 },
+    { label: "SAP", value: 12 },
+    { label: "LIMS", value: 20 },
+    { label: "PYTHON", value: 16 },
+  ];
+  const max = Math.max(...verticalData.map(v => v.value));
+  document.getElementById("verticalBar").innerHTML = verticalData.map(v => `
+    <div class="vbar-col">
+      <div class="vbar-val">${v.value}</div>
+      <div class="vbar" style="height:${Math.round((v.value / max) * 100)}%"></div>
+      <div class="vbar-label">${v.label}</div>
+    </div>
+  `).join("");
+}
+renderCharts();
+
+// ---------- VIEW REQUISITION MODAL ----------
+const viewReqBackdrop = document.getElementById("viewReqBackdrop");
+const viewReqGrid = document.getElementById("viewReqGrid");
+const viewReqSub = document.getElementById("viewReqSub");
+const viewReqEditBtn = document.getElementById("viewReqEditBtn");
+
+function detailField(label, value){
+  return `<div class="detail-field"><span class="dl">${label}</span><span class="dv">${value ?? "—"}</span></div>`;
+}
+
+function openViewReq(i){
+  const r = requisitions[i];
+  viewReqSub.textContent = `${r.id} · ${r.vertical} · ${r.client}`;
+  viewReqGrid.innerHTML = [
+    detailField("Requisition ID", r.id),
+    detailField("SOW No", r.sowNo),
+    detailField("Vertical", r.vertical),
+    detailField("Client", r.client),
+    detailField("Project", r.project),
+    detailField("Skill", r.skill),
+    detailField("Positions", r.positions),
+    detailField("Priority", `<span class="priority-badge ${r.priorityBadge}">${r.priority}</span>`),
+    detailField("Hiring Type", r.hiring),
+    detailField("Start Date", r.start),
+    detailField("Created On", `${r.created} · ${r.createdTime}`),
+    detailField("Status", `<span class="req-badge ${r.badge}">${r.status}</span>`),
+  ].join("");
+  viewReqEditBtn.href = `initiate-requisition.html?edit=1&id=${encodeURIComponent(r.id)}&vertical=${encodeURIComponent(r.vertical)}&client=${encodeURIComponent(r.client)}&project=${encodeURIComponent(r.project)}&skill=${encodeURIComponent(r.skill)}&positions=${encodeURIComponent(r.positions)}&priority=${encodeURIComponent(r.priority)}&hiring=${encodeURIComponent(r.hiring)}&start=${encodeURIComponent(r.start)}`;
+  viewReqBackdrop.classList.add("show");
+}
+function closeViewReq(){
+  viewReqBackdrop.classList.remove("show");
+}
+window.openViewReq = openViewReq;
+document.getElementById("viewReqCloseBtn").addEventListener("click", closeViewReq);
+document.getElementById("viewReqCloseBtn2").addEventListener("click", closeViewReq);
+viewReqBackdrop.addEventListener("click", (e) => { if(e.target === viewReqBackdrop) closeViewReq(); });
+</script>
+<script src="app.js"></script>
+</body>
+</html>
